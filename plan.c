@@ -205,12 +205,15 @@ Your program has to implement:
 
 6.[DESIGN IDEA] not to forget to implement the current working directory inside of command line as we navigate thru the shell
 
-
-
 7.[FUNCTION OF UTILS]
 	get_path of token: 	-> usage WHICH builtin
 						-> usage in executor/child process
-						-> the maximum chars of a path is 256bits
 						->DRY!! (don't repeat yourself) 		
 
+8. [CHILD PROCESS TO EXECVE]
+	-> have to adding a listner of signals
+	-> in the child process we have to execute the commands of userinput after checking it
+	-> have to divide into a map the paths of PATH variable.
+	-> have to append the command of user input
+	-> have to check the access of the command
 */
