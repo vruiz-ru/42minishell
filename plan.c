@@ -157,7 +157,7 @@ Your program has to implement:
 				don't forget to free the store_cwd string after use;
 	
 	III.	echo command:	Print arguments to stdout
-				treate the flag -n properly -> quit the \n char
+				treat the flag -n properly -> deletes the \n char
 				doesn't recognize simple backslash
 					ex: echo \new -> new
 						echo \\new -> \new
@@ -178,7 +178,13 @@ Your program has to implement:
 						adasdsadsa
 						adsadas
 						\n (becaue the closing " its on the last row and its empty)
-						3. treat the variable within '$VAR' literally, instead of "$VAR" or $VAR which prints the value of that specific variable (in case of variable doesn't exists, will print a new line char)
+				treat the variable within '$VAR' literally, 
+                instead of "$VAR" or $VAR which prints the value of that specific variable (in case of variable doesn't exists, will print a new line char)
+                .----------------------------------------------.
+                | $$ - print parent process id with getppid(); |
+                '----------------------------------------------'
+				the differences between getpid and getppid is that the getpid returns the id of the current instance execution and get ppid returns the id of the whole process of file we are working on
+				
 	IV.		env command:	Print all environment variables
 				should be stipulated on the main
 	V.		exit command is a simple EXIT_SUCCESS/FAILURE (Exit the shell)
@@ -215,5 +221,5 @@ Your program has to implement:
 	-> in the child process we have to execute the commands of userinput after checking it
 	-> have to divide into a map the paths of PATH variable.
 	-> have to append the command of user input
-	-> have to check the access of the command
+	-> have to check the access of the command: if (access(path, X_OK) == 0) then execve *X_OK is the flag to check if we are granted with execute permission*
 */
