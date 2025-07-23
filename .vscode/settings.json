@@ -59,6 +59,7 @@
 "files.associations": {
     "*.dbclient-js": "javascript",
     "libft.h": "c",
-    "string.h": "c"
+    "string.h": "c",
+    "history.h": "c"
 }
 }

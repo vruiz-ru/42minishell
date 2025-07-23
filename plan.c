@@ -7,7 +7,8 @@ External functs.
 
 -------------- INPUT HANDLING -------------------
 
-readline,   
+readline
+
 rl_clear_history, 
 rl_on_new_line,
 rl_replace_line, 
@@ -216,3 +217,102 @@ checked 4. [STRTOK] Implemented
 	-> have to append the command of user input
 	-> have to check the access of the command: if (access(path, X_OK) == 0) then execve *X_OK is the flag to check if we are granted with execute permission*
 */
+#include "libft/libft.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <stddef.h>
+#include <limits.h>
+
+#define PROMPT		"👉 "
+#define REPLY	"💬"
+#define WRONG		"❓"
+
+int	main(void)
+{
+	char	*line;
+	char	*commands[4] = {"cat", "echo", "cd", NULL};
+	char	*token;
+	int		n_path;
+	char	**args;
+	int		n_arg;
+	int		i;
+	int		j;
+	char	delimiter;
+	int		check;
+	char	cwd[4096];
+
+	delimiter = ' ';
+	while (1)
+	{
+		// GET CURRENT WORK DIRECTORY
+		if (getcwd(cwd, sizeof(cwd)) == NULL)
+		{
+			perror("getcwd");
+			return (0);
+		}
+		
+		// PRINT ONLY LAST FOLDER AS PATH OF SHELL
+		j = 0;
+		n_path = 0;
+		while (cwd[j])
+		{
+			if (cwd[j] == '/')
+				n_path = j + 1;
+			j++;
+		}
+		ft_printf("%s ", cwd + n_path);
+
+		// READ INPUT FROM USER
+		n_arg = 0;
+		line = readline(PROMPT);
+		if (line == NULL)
+			exit(EXIT_FAILURE);
+		
+		// COUNT NUMBER OF ARGS
+		i = 0;
+		while (line[i])
+		{
+			if (line[i] == delimiter)
+				n_arg++;
+			i++;
+		}
+		if (line[i] == '\0')
+			n_arg++;
+		
+		// GIVING MEMORY TO THE MAP OF ARGUMENTS
+		args = malloc((i + 1) * sizeof(char *));
+		if (!args)
+			return (free(line), 0);
+		
+		// TOKENIZE THE ARGUMENTS
+		token = ft_strtok(line, " ");
+		i = 0;
+		while (token)
+		{
+			args[i++] = token;
+			token = ft_strtok(NULL, " ");
+		}
+		args[i] = NULL;
+
+		// CHECK AVAILABILITY OF ARGUMENTS
+		check = 0;
+		i = 0;
+		while (commands[i])
+		{
+			if (!ft_strncmp(args[0], commands[i], ft_strlen(commands[i])))
+				check = 1;	
+			i++;
+		}
+		if (!check)
+			ft_printf("%scommand '%s' doesn't exist!\n", WRONG, args[0]);
+		else
+			ft_printf("%sCommand found!\n", REPLY);
+		
+		// ELIBERATE MEMORY OF USER INPUT;
+		free(line);
+		line = NULL;
+	}
+	return (0);
+}
