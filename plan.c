@@ -132,14 +132,14 @@ Your program has to implement:
 
 3.[CHECKING ARGS/TOKENS]  checking the input/tokens (what tokens actually stand for is the command, its flags, and path/input)
 
-4.[STRTOK]  * we are parsing the with strtok() - stands for string tokenizing or split() of our libft. 
+4.[STRTOK]  * we are parsing the args with strtok() - stands for string tokenizing (kinda split() of our libft). 
 				ex  char **tokens = ft_split(args, " ").
 					while (args) if *args *tokens = *args;
 					*toket[LAST_IDX] = NULL; 
-			* implementing our own strtok involves kinda ft_split, 
-			but every time calling the strtok on the string to be tokenized, 
-			the string will have the value - strtok'times. 
-			Split combined with static variables (gnl)
+			* implementing our own strtok
+				-   every time calling the strtok on the string to be tokenized, 
+					the string will have the value - strtok'times. 
+			(Split combined with static variables)
 
 5.[BUILTINS]  builtin commands:			
 	* parsing the built ins commands should be done into a separate function that will returns 0 if there was a problem and > 0 if there are none.
@@ -179,10 +179,10 @@ Your program has to implement:
 						adsadas
 						\n (becaue the closing " its on the last row and its empty)
 				treat the variable within '$VAR' literally, 
-                instead of "$VAR" or $VAR which prints the value of that specific variable (in case of variable doesn't exists, will print a new line char)
-                .----------------------------------------------.
-                | $$ - print parent process id with getppid(); |
-                '----------------------------------------------'
+				instead of "$VAR" or $VAR which prints the value of that specific variable (in case of variable doesn't exists, will print a new line char)
+				.----------------------------------------------.
+				| $$ - print parent process id with getppid(); |
+				'----------------------------------------------'
 				the differences between getpid and getppid is that the getpid returns the id of the current instance execution and get ppid returns the id of the whole process of file we are working on
 				
 	IV.		env command:	Print all environment variables
@@ -223,3 +223,22 @@ Your program has to implement:
 	-> have to append the command of user input
 	-> have to check the access of the command: if (access(path, X_OK) == 0) then execve *X_OK is the flag to check if we are granted with execute permission*
 */
+
+#include <stddef.h>
+#include "libft/libft.h"
+
+int main(void)
+{
+	char *s1 = "  Hello >> World!";
+	char *s2 = ",,A,,B,,C,,";
+	char *s3 = "abc";
+	char *s4 = "";
+	char *t;
+	
+	t = ft_strtok(s1, " ");
+	while (t) {
+		ft_printf("Token: [%s]\n", t);
+		t = ft_strtok(NULL, " ");
+	}
+	return (0);
+}
