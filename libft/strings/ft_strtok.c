@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 12:45:52 by aghergut          #+#    #+#             */
-/*   Updated: 2025/07/23 12:52:35 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:11:22 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,6 @@ static char	*failed_malloc(void)
 {
 	write(1, "Failed malloc!\n", sizeof("Failed malloc!\n") - 1);
 	return (NULL);
-}
-
-static int	token_length(char *str, const char *delim)
-{
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (ft_strchr(delim, str[i]))
-			break ;
-		i++;
-	}
-	return (i);
 }
 
 static char	*get_token(char *cpy, const char *delim)
@@ -44,8 +30,10 @@ static char	*get_token(char *cpy, const char *delim)
 		cpy++;
 	if (!*cpy)
 		return (NULL);
-	size = token_length(cpy, delim);
-	token = malloc(size + 1);
+	size = 0;
+	while (cpy[size] && !ft_strchr(delim, cpy[size]))
+		size++;
+	token = malloc((size + 1) * sizeof(char));
 	if (!token)
 		return (failed_malloc());
 	i = -1;
@@ -62,15 +50,15 @@ static char	*trim_static(char *cpy, const char *delim)
 	int		i;
 
 	size = 0;
-	while (cpy[size] && ft_strchr(delim, cpy[size]))
+	while (cpy[size] && ft_strchr(delim, cpy[size]))	// skip leading delim
 		size++;
-	while (cpy[size] && !ft_strchr(delim, cpy[size]))
+	while (cpy[size] && !ft_strchr(delim, cpy[size]))	// skip last token
 		size++;
-	while (cpy[size] && ft_strchr(delim, cpy[size]))
+	while (cpy[size] && ft_strchr(delim, cpy[size]))	// skip delim 
 		size++;
 	if (!cpy[size])
 		return (free(cpy), NULL);
-	new = malloc((size + 1) * sizeof(char));		// + 1 = char NULL
+	new = malloc((size + 1) * sizeof(char));		
 	if (!new)
 		return (failed_malloc());
 	i = 0;

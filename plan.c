@@ -132,14 +132,7 @@ Your program has to implement:
 
 3.[CHECKING ARGS/TOKENS]  checking the input/tokens (what tokens actually stand for is the command, its flags, and path/input)
 
-4.[STRTOK]  * we are parsing the args with strtok() - stands for string tokenizing (kinda split() of our libft). 
-				ex  char **tokens = ft_split(args, " ").
-					while (args) if *args *tokens = *args;
-					*toket[LAST_IDX] = NULL; 
-			* implementing our own strtok
-				-   every time calling the strtok on the string to be tokenized, 
-					the string will have the value - strtok'times. 
-			(Split combined with static variables)
+v4. [STRTOK] Implemented
 
 5.[BUILTINS]  builtin commands:			
 	* parsing the built ins commands should be done into a separate function that will returns 0 if there was a problem and > 0 if there are none.
