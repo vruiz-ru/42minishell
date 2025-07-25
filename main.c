@@ -57,7 +57,7 @@ pipe
 ---------------- ERROR HANDLING -----------------
 strerror/perror
 
------------- Terminal Contorl & TTY --------------
+------------ Terminal Control & TTY --------------
 isatty 
 ttyname 
 ttyslot 
@@ -183,7 +183,7 @@ Your program has to implement:
 				
 	✅IV.		env command:	Print all environment variables
 				should be stipulated on the main
-	✅V.		exit command is a simple EXIT_SUCCESS/FAILURE (Exit the shell)
+	✅V.		exit command is a simple EXIT_SUCCESS(0)/FAILURE(nonzero) (Exit the shell)
 	VI.		setenv & unsetenv commands:	Set or unset environment variables 
 				* should be call before shell builts, right after parse input
 				* setenv represents adding/changing a variable to the environment (char **env)
@@ -218,6 +218,29 @@ Your program has to implement:
 	-> have to divide into a map the paths of PATH variable.
 	-> have to append the command of user input
 	-> have to check the access of the command: if (access(path, X_OK) == 0) then execve *X_OK is the flag to check if we are granted with execute permission*
+
+9. Steps into executing a command from path:
+	I.		shell forks itself
+	II. 	parent waits for child to finish
+	II.5	(a good practice is to close stdin and stdout file description because if it's open, can interfere with the execution of commands)
+			(we need to remember that everything in linux is a file, and if its a file will be fd opens and we need to close the fd after each user)
+	III.	child exec's the command after it checks its availability of the command:._ if the command exists in bin folder
+																					  \ if we have access to the command
+
+10. Special characters to treat:
+		# ' " \ $ * ~ ? < > ( ) ! | & ; space newline
+		' ' -> quotes every enclosed metachar
+		" " -> quotes all metachars but $ \ ! * @ 
+
+11. /dev/null to learn about this file
+
+12. the differences between user input: cmd1; cmd2; cmd3 -> runs a command right after the previous one finish
+										cmd1 | cmd2 | cmd3 -> the input of the previous cmd its passed to the next cmd (and so on)
+
+13. ideas to do with the values of exit statuses:
+		-> implementing the bonus as:
+						-> cmd1 && cmd2 = if cmd1 returns exit status SUCCESS, then cmd2 its running 
+						-> cmd1 || cmd2 = if cmd1 returns exit status FAILURE, then cmd2 its running, contrarly cmd2 is not running if cmd1 have exit SUCCESS 
 */
 
 // SUPERFICIAL EXAMPLE
