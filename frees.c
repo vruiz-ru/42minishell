@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:20:33 by aghergut          #+#    #+#             */
-/*   Updated: 2025/07/24 12:21:41 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:41:19 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,26 @@ void	free_map(char **map)
 {
 	int	i;
 
+	if (!map || !*map)
+		return ;
 	i = -1;
 	while (map[++i])
 		free(map[i]);
 	free(map);
+}
+
+void	free_main(t_utils *main_struct)
+{
+	if (main_struct)
+	{
+		if (main_struct->tokens)
+			free_map(main_struct->tokens);
+		if (main_struct->line)
+			free(main_struct->line);
+		if (main_struct->prompt)
+			free(main_struct->prompt);
+		if (main_struct->res)
+			free(main_struct->res);
+		free(main_struct);
+	}
 }

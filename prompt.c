@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:38:22 by aghergut          #+#    #+#             */
-/*   Updated: 2025/07/24 13:11:02 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/07/31 14:04:23 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,18 @@ char    *current_prompt(char *cwd)
 
 char	*get_prompt(void)
 {
-	return (ft_strjoin(ft_strrchr(get_cwd(NULL), '/') + 1, PROMPT));
+	char	*cwd;
+	char	*base;
+	char	*res;
+	
+	cwd = get_cwd(NULL);
+	base = ft_strrchr(cwd, '/');
+	res = NULL;
+	if (base)
+		res = ft_strjoin(base + 1, PROMPT);
+	else
+		res = ft_strdup(cwd);
+	free(cwd);
+	return (res);
 }
 

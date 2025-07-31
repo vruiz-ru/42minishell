@@ -62,6 +62,7 @@
     "string.h": "c",
     "history.h": "c",
     "minishell.h": "c",
-    "stddef.h": "c"
+    "stddef.h": "c",
+    "stdbool.h": "c"
 }
 }

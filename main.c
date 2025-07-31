@@ -10,8 +10,8 @@ External functs.
 
 readline
 
-rl_clear_history, 
-rl_on_new_line		->
+rl_clear_history, 	-> clears the history of commands
+rl_on_new_line		-> 
 rl_replace_line, 	->
 rl_redisplay, 		->
 add_history,		-> add the line to the history since we have to save the history
@@ -137,7 +137,8 @@ Your program has to implement:
 
 ✅4. [STRTOK] Implemented
 
-5.[BUILTINS]  builtin commands:			
+5.[BUILTINS]  builtin commands:
+	"~" = /home/user. Whenever our minishell will see that will replace it with the mentioned path		
 	* parsing the built ins commands should be done into a separate function that will returns 0 if there was a problem and > 0 if there are none.
 	* every bulitin command should operate in the original process, not a child
 	I.		cd command:		Change current working directory (use chdir())
@@ -145,6 +146,9 @@ Your program has to implement:
 				print required arguments (token)/if its not, we are going back to the start cwd
 				chdir returns 0 if success
 				don't forget to implement ../../../ (thought: counting sequence "../" and then backward as many folders as sequence are)
+				
+				cd / -> will returns you to the root path
+					-> in our case will returns at the home shell (minishell's dir)
 
 
 	✅II.		pwd command:	Print current directory (use getcwd())
@@ -155,35 +159,36 @@ Your program has to implement:
 				don't forget to free the store_cwd string after use;
 	
 	III.	echo command:	Print arguments to stdout
-				treat the flag -n properly -> deletes the \n char
-				doesn't recognize simple backslash
-					ex: echo \new -> new
-						echo \\new -> \new
-				expect a closing " if there is one
-					ex: 1.echo sadas" -> > (for continuation and after we put " will outputs) in this case: 	sadas
-																											: command not found
-						2. echo "
-						> asdsa
-						> asdasdsa
-						> adsadsa
-						> adasdsadsa
-						> adsadas
-						> "
-					output:	\n (because the " is on the line with echo and its empty)
-						asdsa
-						asdasdsa
-						adsadsa
-						adasdsadsa
-						adsadas
-						\n (becaue the closing " its on the last row and its empty)
-				treat the variable within '$VAR' literally, 
-				instead of "$VAR" or $VAR which prints the value of that specific variable (in case of variable doesn't exists, will print a new line char)
+				*   treat the flag -n properly -> deletes the \n char
+				*   doesn't recognize simple backslash
+						ex: echo \new -> new
+							echo \\new -> \new
+				*   expect a closing " if there is one
+						ex: 1.echo sadas" -> > (for continuation and after we put " will outputs) in this case: 	sadas
+																												: command not found
+							2. echo "
+							> asdsa
+							> asdasdsa
+							> adsadsa
+							> adasdsadsa
+							> adsadas
+							> "
+					[OUTPUT]\n (because the " is on the line with echo and its empty)
+							asdsa
+							asdasdsa
+							adsadsa
+							adasdsadsa
+							adsadas
+							\n (becaue the closing " its on the last row and its empty)
+				*	treat the variable within '$VAR' literally, 
+				*	instead of "$VAR" or $VAR which prints the value of that specific variable (in case of variable doesn't exists, will print a new line char)
 		!!!!		other example with {} special char
 						$> foo=4
 						$> echo $foo
 						4
 						$> echo ${foo}d
 						4d
+				*	echo $? will print the exit status of the last executed cmd
 				.----------------------------------------------.
 				| $$ - print parent process id with getppid(); |
 				'----------------------------------------------'
@@ -253,8 +258,11 @@ Your program has to implement:
 	III.	child exec's the command after it checks its availability of the command:._ if the command exists in bin folder
 																					  \ if we have access to the command
 
-10. Special characters to treat:
-		# ' " \ $ * ~ ? < > ( ) ! | & ; space newline
+10. [SPECIAL CHARS]:
+		# ' " \ $ < > ( ) ! | & ; space newline
+		*	-> (match any char) ex. find *.c -> will find every .c file (adas.c, asdsadsa.c, dasdasda.c)
+		~	-> the replacement of home path (/home/user) 
+		?	-> (match any single char) ex. find ?.c -> will find every file .c that case one char as name (a.c, b.c, x.c)
 		' ' -> quotes every enclosed metachar
 		" " -> quotes all metachars but $ \ ! * @ 
 
@@ -263,109 +271,165 @@ Your program has to implement:
 12. the differences between user input: cmd1; cmd2; cmd3 -> runs a command right after the previous one finish
 										cmd1 | cmd2 | cmd3 -> the input of the previous cmd its passed to the next cmd (and so on)
 
-13. ideas to do with the values of exit statuses:
+13. [BONUS]
+		ideas to do with the values of exit statuses:
 		-> implementing the bonus as:
 						-> cmd1 && cmd2 = if cmd1 returns exit status SUCCESS, then cmd2 its running 
 						-> cmd1 || cmd2 = if cmd1 returns exit status FAILURE, then cmd2 its running, contrarly cmd2 is not running if cmd1 have exit SUCCESS 
 14. [NON BUILTINS COMMANDS]
 		*idea* should first check the arguments, and then do the normal behavior
 
+15. [JOB CONTROL IMPLEMENTING]
+	-> background job 
+		* when entering in the background you have to put '&' on the end of the command
+		* after pressing enter, the command will run into background and you don't have to wait for the command to finish for 
+		start using the terminal in the foreground
+			ex using: when downloading stuff and you stil want to use the terminal for other things 
+	-> foreground job
+		* keeps the terminal busy until the command is done
+
+	ideas of implementing the '&' trigger for background?
+		* cr
 */
 
 // SUPERFICIAL EXAMPLE
 
 #include "minishell.h"
 
-int	main(int argc, char *argv[], char *envp[])
+int is_sym(char *token, char sym)
 {
-	char	*line;
-	char    *prompt;
-	char    *variable;
-	char	*commands[8] = {"cat", "echo", "cd", "clear", "env", "pwd", "exit", NULL};
-	char	*token;
-	char	**args;
-	int		n_arg;
 	int		i;
-	int		j;
-	char	delimiter;
-	int		check;
-	
 
-	delimiter = ' ';
-	while (1)
+	i = -1;
+	while (token[++i])
 	{
-		// HANDLE SIGINT (CTRL+C)
-		signal(SIGINT, handle_sigint);
-
-		// READ INPUT FROM USER
-		prompt = get_prompt();
-		line = readline(prompt);
-		if (line == NULL)
-			exit(EXIT_FAILURE);
-		add_history(line);
-		// COUNT NUMBER OF ARGS
-		n_arg = 0;
-		i = 0;
-		while (line[i])
-		{
-			if (line[i] == delimiter)
-				n_arg++;
-			i++;
-		}
-		if (line[i] == '\0')
-			n_arg++;
-		
-		// GIVING MEMORY TO THE MAP OF ARGUMENTS
-		args = malloc((i + 1) * sizeof(char *));
-		if (!args)
-			return (free(line), 0);
-		
-		// TOKENIZE THE ARGUMENTS
-		token = ft_strtok(line, " ");
-		i = 0;
-		while (token)
-		{
-			args[i++] = token;
-			token = ft_strtok(NULL, " ");
-		}
-		args[i] = NULL;
-
-		// CHECK AVAILABILITY OF ARGUMENTS
-		check = 0;
-		i = 0;
-		if (!ft_strncmp(args[0], commands[3], ft_strlen(args[0])))
-			printf("%s", CLEAR);
-		else if (!ft_strncmp(args[0], commands[1], ft_strlen(args[0])))
-			printf("%s\n", get_variable(envp, args[1] + 1));
-		else if (!ft_strncmp(args[0], commands[4], ft_strlen(args[0])))
-			get_env(envp);
-		else if (!ft_strncmp(args[0], commands[5], ft_strlen(args[0])))
-			printf("%s\n", get_cwd(NULL));
-		else if (!ft_strncmp(args[0], commands[6], ft_strlen(args[0])))
-			break ;
-		else
-		{
-			while (commands[i])
-			{
-				if (!ft_strncmp(args[0], commands[i], ft_strlen(commands[i])))
-					check = 1;	
-				i++;
-			}
-			if (!check)
-				ft_printf("%scommand '%s' doesn't exist!\n", WRONG, args[0]);
-			else
-				ft_printf("%sCommand found!\n", REPLY);
-		}
-		// ELIBERATE MEMORY OF USER INPUT;
-		free(line);
-		free(prompt);
-		line = NULL;
-		prompt = NULL;
+		if (token[i] == sym)
+			return (1);
 	}
-	free(line);
-	free(prompt);
-	line = NULL;
-	prompt = NULL;
 	return (0);
 }
 
+void	built_echo(char **tokens, char *envp[])
+{
+	int		idx;
+	char	*input;
+
+	idx = 0;
+	while (tokens[++idx])
+	{
+		if (is_sym(tokens[idx], '\''))
+		{
+			if (!is_sym(tokens[idx] + 1, '\''))
+			{
+				ft_printf("> ");
+			}
+		}
+	}
+}
+
+int	count_tokens(char *line, char delimiter)
+{
+	int	count;
+	int	inside;
+
+	count = 0;
+	inside = 0;
+	while (*line)
+	{
+		if (*line != delimiter && !inside)
+		{
+			inside = 1;
+			count++;
+		}
+		if (*line == delimiter)
+			inside = 0;
+		line++;
+	}
+	return (count);
+}
+
+void	add_tokens(char *line, char	***tokens, char delimiter)
+{
+	char	*token;
+	int		map_size;
+	int		map_idx;
+
+	map_size = count_tokens(line, delimiter);
+	*tokens = malloc((map_size + 1) * sizeof(char *));
+	if (!*tokens)
+		return ;
+	token = ft_strtok(line, " ");
+	map_idx = 0;
+	while (token)
+	{
+		(*tokens)[map_idx++] = ft_strdup(token);
+		free(token);
+		token = ft_strtok(NULL, " ");
+	}
+	(*tokens)[map_idx] = NULL;
+}
+
+int	ft_readinput(t_utils **main)
+{
+	(*main)->prompt = get_prompt();
+	(*main)->line = readline((*main)->prompt);
+	if ((*main)->line == NULL)
+	{
+		free_main(*main);
+		exit(EXIT_FAILURE);
+		return (0);
+	}
+	add_history((*main)->line);
+	add_tokens((*main)->line, &(*main)->tokens, ' ');
+	return (1);
+}
+
+int	init_main(t_utils **main_struct)
+{
+	*main_struct = malloc(sizeof(t_utils));
+	if (!*main_struct)
+		return (0);
+	(*main_struct)->line = NULL;
+	(*main_struct)->tokens = NULL;
+	(*main_struct)->running = true;
+	(*main_struct)->prompt = NULL;
+	(*main_struct)->res = NULL;
+	return (1);
+}
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	char	*commands[8] = {"cat", "echo", "cd", "clear", "env", "pwd", "exit", NULL};
+	t_utils	*main_struct;
+
+	while (1)
+	{
+		if (!init_main(&main_struct))
+			exit(EXIT_FAILURE);
+		signal(SIGINT, handle_sigint);
+		if (!ft_readinput(&main_struct))
+			return (0);
+		if (!ft_strncmp(main_struct->tokens[0], commands[3], ft_strlen(main_struct->tokens[0])))
+			printf("%s", CLEAR);
+		else if (!ft_strncmp(main_struct->tokens[0], commands[1], ft_strlen(main_struct->tokens[0])))
+		{
+			main_struct->res = get_variable(envp, main_struct->tokens[1] + 1);
+			printf("%s\n", main_struct->res);
+		}
+		else if (!ft_strncmp(main_struct->tokens[0], commands[4], ft_strlen(main_struct->tokens[0])))
+			get_env(envp);
+		else if (!ft_strncmp(main_struct->tokens[0], commands[5], ft_strlen(main_struct->tokens[0])))
+		{
+			main_struct->res = get_cwd(NULL);
+			printf("%s\n", main_struct->res);
+		}
+		else if (!ft_strncmp(main_struct->tokens[0], commands[6], ft_strlen(main_struct->tokens[0])))
+			break ;
+		else
+			ft_printf("%scommand '%s' doesn't exist!\n", WRONG, main_struct->tokens[0]);
+		// ELIBERATE MEMORY OF USER INPUT;
+		free_main(main_struct);
+	}
+	rl_clear_history();
+	return (free_main(main_struct), 0);
+}

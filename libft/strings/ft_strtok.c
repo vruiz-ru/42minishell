@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 12:45:52 by aghergut          #+#    #+#             */
-/*   Updated: 2025/07/23 14:11:22 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:09:52 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static char	*trim_static(char *cpy, const char *delim)
 		size++;
 	if (!cpy[size])
 		return (free(cpy), NULL);
-	new = malloc((size + 1) * sizeof(char));		
+	new = malloc((ft_strlen(cpy + size) + 1) * sizeof(char));		
 	if (!new)
 		return (failed_malloc());
 	i = 0;

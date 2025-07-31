@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 14:07:18 by aghergut          #+#    #+#             */
-/*   Updated: 2025/07/24 14:15:08 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/07/31 12:35:38 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int valid_cmd(char line, char *envp[])
 			while (path_token)
 			{
 				path_token = ft_strtok(NULL, ":");
-			}	
+            }
 		}
 	}
 }
