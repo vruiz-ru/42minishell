@@ -6,27 +6,30 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 18:55:02 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 11:42:07 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 20:22:43 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char **remove_var(char **env, char *var_name)
+static int	remove_var(char ***env, char *var_name)
 {
 	size_t	i;
+	size_t	len;
 
 	i = 0;
-	while (env[i])
+	len = ft_strlen(var_name);
+	while ((*env)[i])
 	{
-		if (ft_strnstr(env[i], var_name, ft_strlen(var_name)))
+		if (!ft_strncmp((*env)[i], var_name, len) && (*env)[i][len] == '=')
 		{
-			env = ft_mapdel_item(env, i);
-			break ;	
+			if (ft_mapitem_del(env, i))
+				return (1);
+			break ;
 		}
 		i++;
 	}
-	return (env);
+	return (0);
 }
 
 int	ft_unset(t_subproc **process)
@@ -41,7 +44,7 @@ int	ft_unset(t_subproc **process)
 	while (ptr)
 	{
 		var_name = (char *)ptr->content;
-		(*process)->local_env = remove_var((*process)->local_env, var_name);
+		remove_var(&(*process)->local_env, var_name);
 		ptr = ptr->next;
 	}
 	return (1);

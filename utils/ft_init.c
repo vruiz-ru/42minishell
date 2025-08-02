@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:32:12 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 11:59:37 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 17:33:40 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ int	init_subproc(t_main *shell, t_subproc **sub)
 	*sub = (t_subproc *)malloc(sizeof(t_subproc));
 	if (!*sub)
 		return (perror("malloc subproc"), 0);
+    ft_memset(*sub, 0, sizeof(t_subproc));
 	if (!init_builtins(&(*sub)->builtins))
 		return (free(sub), perror("malloc builts"), 0);
 	(*sub)->ptr_main = shell;
 	(*sub)->local_env = ft_mapdup(shell->sh_envp);
-	(*sub)->buffer_env = NULL;
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 #    By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 13:11:03 by aghergut          #+#    #+#              #
-#    Updated: 2025/08/02 11:21:27 by aghergut         ###   ########.fr        #
+#    Updated: 2025/08/02 20:16:42 by aghergut         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,10 +61,10 @@ SRCS8 = $(FTPRINTF_DIR)ft_fill.c $(FTPRINTF_DIR)ft_flagadd.c \
 		$(FTPRINTF_DIR)ft_printchar.c $(FTPRINTF_DIR)ft_printstr.c  \
 		$(FTPRINTF_DIR)ft_printint.c  $(FTPRINTF_DIR)ft_printu.c  \
 		$(FTPRINTF_DIR)ft_printpxx.c $(FTPRINTF_DIR)ft_printf.c
-SRCS9 =	$(MAPS_DIR)ft_mapdel_item.c $(MAPS_DIR)ft_mapdup.c \
+SRCS9 =	$(MAPS_DIR)ft_mapitem_del.c $(MAPS_DIR)ft_mapdup.c \
 		$(MAPS_DIR)ft_mapfree.c $(MAPS_DIR)ft_mapitem_index.c \
-		$(MAPS_DIR)ft_mapreplace_item.c $(MAPS_DIR)ft_mapsize.c \
-		$(MAPS_DIR)ft_mapadd_item.c $(MAPS_DIR)ft_mapnew.c
+		$(MAPS_DIR)ft_mapitem_replace.c $(MAPS_DIR)ft_mapsize.c \
+		$(MAPS_DIR)ft_mapitem_add.c $(MAPS_DIR)ft_mapnew.c
 
 # Object directories
 OBJS_DIR_CHANGECHAR = $(CHANGECHAR_DIR)o_files/

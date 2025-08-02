@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_mapreplace_item.c                               :+:      :+:    :+:   */
+/*   ft_mapitem_replace.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 19:08:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/01 19:16:22 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 20:20:00 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "maps.h"
 
-char	**ft_mapreplace_item(char **map, char *item, size_t n)
+int	ft_mapitem_replace(char ***map, char *item, size_t idx)
 {
-	size_t	idx;
-
-	if (!map || !*map || ft_mapsize(map) < n)
-		return (NULL);
-	idx = n - 1;
-	if (map[idx] != NULL)
-		free(map[idx]);
-	map[idx] = ft_strdup(item);
-	if (!map[idx])
-		return (NULL);
-	return (map);
+	if (!map || !*map || ft_mapsize(*map) <= idx)
+		return (0);
+	if ((*map)[idx] != NULL)
+		free((*map)[idx]);
+	(*map)[idx] = ft_strdup(item);
+	if (!(*map)[idx])
+		return (0);
+	return (1);
 }

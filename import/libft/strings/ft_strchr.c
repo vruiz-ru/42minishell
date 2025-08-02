@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:15:18 by aghergut          #+#    #+#             */
-/*   Updated: 2025/07/23 14:15:12 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 18:06:11 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_strchr(const char *str, int ch)
 	while (*str != c)
 	{
 		if (*str == '\0')
-			return (0);
+			return (NULL);
 		str++;
 	}
 	return ((char *)str);

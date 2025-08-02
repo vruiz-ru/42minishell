@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:50:39 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 11:57:26 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 20:26:19 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ foreground pipeline.
 ◦ echo with option -n
 ◦ cd with only a relative or absolute path
 ✅◦ pwd with no options
-◦ export with no options
+✅◦ export with no options
 ✅◦ unset with no options
 ✅◦ env with no options or arguments
 ✅◦ exit with no options

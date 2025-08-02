@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:20:33 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 11:48:26 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 17:49:19 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	free_main(t_main *shell)
 {
+	if (shell->sh_envp)
+		ft_mapfree(shell->sh_envp);
 	if (shell->line)
 		free(shell->line);
 	if (shell->prompt)
@@ -41,7 +43,9 @@ void	free_subprocess(t_subproc *ptr)
 {
 	if (ptr->local_env)
 		ft_mapfree(ptr->local_env);
-	if (ptr->builtins->tokens)
+	if (ptr->buffer_env)
+		ft_mapfree(ptr->buffer_env);
+	if (ptr->builtins && ptr->builtins->tokens)
 		ft_lstclear(&ptr->builtins->tokens, free);
 	if (ptr->builtins)
 		free_builts(ptr->builtins);

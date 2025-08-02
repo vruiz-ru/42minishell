@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 18:41:48 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/01 19:05:17 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 17:19:25 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	**ft_mapdup(char **map)
 		dup[i] = ft_strdup(map[i]);
 		if (!dup[i])
 		{
-			while (--i >= 0)
+			while (i-- > 0)
 				free(dup[i]);
 			return (free(dup), NULL);
 		}
