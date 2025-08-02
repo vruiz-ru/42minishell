@@ -1,3 +1,48 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/02 11:50:39 by aghergut          #+#    #+#             */
+/*   Updated: 2025/08/02 11:57:26 by aghergut         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+void	reset_utils(t_subproc **process)
+{
+	ft_lstclear(&(*process)->builtins->tokens, free);
+	(*process)->builtins->double_quotes = false;
+	(*process)->builtins->single_quotes = false;
+	(*process)->builtins->flags = false;
+	(*process)->builtins->in_file = false;
+	(*process)->builtins->out_file = false;
+}
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	t_main		*shell;
+	t_subproc  	*process;
+
+	if (argc > 2)
+		return (0);
+	if (!init_main(&shell, argv[0], envp) || !init_subproc(shell, &process))
+		return (free_main(shell), 0);
+	while (1)
+	{
+		signal(SIGINT, handle_sigint);
+		if (!ft_readinput(process))
+			return (0);
+		if (!ft_builtins(process))
+			return(0);
+		reset_utils(&process);
+	}
+	return (0);
+}
+
 /* 42 Instructions
 
 Program name minishell
@@ -84,7 +129,7 @@ relative or an absolute path).
 • Avoid using more than one global variable to indicate a received signal. Consider
 the implications: this approach ensures that your signal handler will not access your
 main data structures.
-• Not interpret unclosed quotes or special characters which are not required by the
+• !!!! Not interpret unclosed quotes or special characters which are not required by the
 subject such as \ (backslash) or ; (semicolon).
 • Handle ’ (single quote) which should prevent the shell from interpreting the meta-
 characters in the quoted sequence.
@@ -105,14 +150,14 @@ foreground pipeline.
 • Handle ctrl-C, ctrl-D and ctrl-\ which should behave like in bash.
 • In interactive mode:
 ✅◦ ctrl-C displays a new prompt on a new line.
-◦ ctrl-D exits the shell.
+✅◦ ctrl-D exits the shell.
 ◦ ctrl-\ does nothing.
 • Your shell must implement the following builtins:
 ◦ echo with option -n
 ◦ cd with only a relative or absolute path
 ✅◦ pwd with no options
 ◦ export with no options
-◦ unset with no options
+✅◦ unset with no options
 ✅◦ env with no options or arguments
 ✅◦ exit with no options
 The readline() function can cause memory leaks. You don’t have to fix them. But
@@ -291,81 +336,3 @@ Your program has to implement:
 	ideas of implementing the '&' trigger for background?
 		* cr
 */
-
-// SUPERFICIAL EXAMPLE
-
-#include "minishell.h"
-/*
-
-int is_sym(char *token, char sym)
-{
-	int		i;
-
-	i = -1;
-	while (token[++i])
-	{
-		if (token[i] == sym)
-			return (1);
-	}
-	return (0);
-}
-
-void	built_echo(char **tokens, char *envp[])
-{
-	int		idx;
-	char	*input;
-
-	idx = 0;
-
-	while (tokens[++idx])
-	{
-		if (is_sym(tokens[idx], '\''))
-		{
-			if (!is_sym(tokens[idx] + 1, '\''))
-			{
-				ft_printf("> ");
-			}
-		}
-	}
-}
-*/
-
-int	init_main(t_utils **shell, char *name)
-{
-	*shell = malloc(sizeof(t_utils));
-	(*shell)->builtins =(t_builts *) malloc(sizeof(t_builts));
-	if (!*shell || !(*shell)->builtins)
-		return (perror("malloc"), 0);
-	(*shell)->builtins->tokens = NULL;
-	(*shell)->builtins->double_quotes = false;
-	(*shell)->builtins->single_quotes = false;
-	(*shell)->builtins->in_file = false;
-	(*shell)->builtins->out_file = false;
-	(*shell)->builtins->flags = false;
-	
-	(*shell)->prompt = NULL;
-	(*shell)->line = NULL;
-	(*shell)->running = true;
-	(*shell)->name = ft_strdup(name + 1);
-	return (1);
-}
-
-int	main(int argc, char *argv[], char *envp[])
-{
-	t_utils	*shell;
-
-	(void)argc;
-	while (1)
-	{
-		shell = NULL;
-		if (!init_main(&shell, argv[0]))
-			exit(EXIT_FAILURE);
-		signal(SIGINT, handle_sigint);
-		if (!ft_readinput(shell))
-			return (0);
-		if (!ft_builtins(shell, envp))
-			return(0);
-		free_main(shell);
-	}
-	return (0);
-}

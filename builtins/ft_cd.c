@@ -6,14 +6,14 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 20:06:37 by aghergut          #+#    #+#             */
-/*   Updated: 2025/07/31 21:09:26 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:39:28 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int ft_cd(t_utils *main_struct)
+int ft_cd(t_subproc *process)
 {
-    (void)main_struct;
+    (void)process;
     return (1);
 }

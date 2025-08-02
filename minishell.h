@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/01 20:52:15 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:46:40 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@
 #define NAME	"minishell42"
 #define CLEAR	"\e[1;1H\e[2J"	// \033[H\033[J"
 
+typedef struct Main_program
+{
+	char	*prompt;
+	char	*line;
+	char	*name;
+	char	**sh_envp;
+	bool	running;
+	bool	sigint_received;
+}	t_main;
+
 typedef struct Builtins
 {
 	t_list	*tokens;
@@ -43,33 +53,39 @@ typedef struct Builtins
 	bool	double_quotes;
 }	t_builts;
 
-typedef struct Shell_utils
+typedef struct Subprocess
 {
+	char		**local_env;
+	char		**buffer_env;
 	t_builts	*builtins;
-	char		*prompt;
 	char		*line;
-	char		*name;
-	char		**sh_envp;
-	bool		running;
-	bool		sigint_received;
-}	t_utils;
+	char		*prompt;
+	int			exit_status;
+	t_main		*ptr_main;
+}   t_subproc;
 
+
+// INIT
+int 	init_subproc(t_main *shell, t_subproc **sub);
+int		init_main(t_main **shell, char *name, char *envp[]);
+int		init_builtins(t_builts **builts);
 // UTILS
-void	free_main(t_utils *main);
-char	*ft_getvar(char *envp[], char *var_name);
-int		is_variable(char *envp[], char *var_name);
-int		ft_readinput(t_utils *main);
+void	free_main(t_main *shell);
+void	free_builts(t_builts *builtins);
+void	free_subprocess(t_subproc *ptr);
+char	*ft_getvar(char **envp, char *var_name);
+int		ft_readinput(t_subproc *proc);
 // BUILTINS
-int		ft_builtins(t_utils *main_struct, char *envp[]);
-int     ft_cd(t_utils *main_struct);
+int		ft_builtins(t_subproc *process);
+int     ft_cd(t_subproc *process);
 void	ft_clear(void);
-int	    ft_echo(t_utils *main_struct, char *envp[]);
-int		ft_exit(t_utils *main_struct);
-int 	ft_export(t_utils *main_struct, char *envp[]);
+int	    ft_echo(t_subproc *process);
+int		ft_exit(t_subproc *process);
+int 	ft_export(t_subproc *process);
 char	*ft_getcwd(void);
-int 	ft_pwd(t_utils *shell);
-int		ft_getenv(char *envp[]);
-int		ft_unset(t_utils *main_struct, char *envp[]);
+int 	ft_pwd(t_subproc *process);
+int		ft_getenv(t_subproc *process);
+int		ft_unset(t_subproc **process);
 // HANDLERS
 void	handle_sigint(int sig);
 

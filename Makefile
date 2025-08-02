@@ -6,7 +6,7 @@
 #    By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/24 13:18:15 by aghergut          #+#    #+#              #
-#    Updated: 2025/08/01 20:48:13 by aghergut         ###   ########.fr        #
+#    Updated: 2025/08/02 12:03:20 by aghergut         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ SRCS1 =	$(BUILTINS_DIR)ft_builtins.c $(BUILTINS_DIR)ft_cd.c \
 SRCS2 =	$(HANDLERS_DIR)ft_sigint.c
 
 SRCS3 =	$(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_getvar.c \
-		$(UTILS_DIR)ft_readinput.c
+		$(UTILS_DIR)ft_readinput.c $(UTILS_DIR)ft_init.c
 
 SRCS4 =	$(MAIN_DIR)main.c
 

@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:41:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/01 18:14:34 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:43:09 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ char	*ft_getcwd(void)
 	return (res);
 }
 
-int ft_pwd(t_utils *shell)
+int ft_pwd(t_subproc *process)
 {
 	char    *dir_path;
 	char	*buff;
 
 	buff = ft_getcwd();
-	dir_path = ft_strnstr(buff, shell->name, ft_strlen(buff));
+	dir_path = ft_strnstr(buff, process->ptr_main->name, ft_strlen(buff));
 	if (!dir_path)
 		return (0);
 	ft_printf("%s\n", dir_path);

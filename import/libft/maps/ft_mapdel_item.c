@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 19:16:51 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/01 20:46:59 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 10:48:43 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	copy_elements(char **map, char **new_map, size_t skip)
 	return (1);
 }
 
-char	**ft_mapdelete_item(char **map, size_t del_idx)
+char	**ft_mapdel_item(char **map, size_t del_idx)
 {
 	char	**new_map;
 	size_t	length;

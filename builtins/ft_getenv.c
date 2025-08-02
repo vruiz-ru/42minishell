@@ -6,20 +6,23 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:51:08 by aghergut          #+#    #+#             */
-/*   Updated: 2025/07/31 21:10:28 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:42:28 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_getenv(char *envp[])
+int	ft_getenv(t_subproc *process)
 {
-	if (!envp || !*envp)
+	char    **ptr;
+	
+	if (!process || !*process->local_env)
 		return (0);
-	while (*envp)
+	ptr = process->local_env;
+	while (*ptr)
 	{
-		ft_printf("%s\n", *envp);
-		envp++;
+		ft_printf("%s\n", *ptr);
+		ptr++;
 	}
 	return (1);
 }

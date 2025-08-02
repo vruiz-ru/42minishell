@@ -6,37 +6,37 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 18:35:16 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/01 17:58:00 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:49:51 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_readinput(t_utils *shell)
+int	ft_readinput(t_subproc *process)
 {
 	t_builts  *ptr_built;
 	char    *prompt;
 	char    *token;
 
-	ptr_built = shell->builtins;
-	if (shell->prompt == NULL)
+	ptr_built = process->builtins;
+	if (process->prompt == NULL)
 		prompt = PROMPT_HOME;	
 	else
-		prompt = shell->prompt;
-	shell->line = readline(prompt);
-	if (shell->line == NULL)
+		prompt = process->prompt;
+	process->line = readline(prompt);
+	if (process->line == NULL)
 	{
-		free_main(shell);
+		free_subprocess(process);
 		exit(EXIT_FAILURE);
 		return (0);
 	}
-	if (shell->line[0] != '\0')
-		add_history(shell->line);
-	token = ft_strtok(shell->line, " ");
+	if (process->line[0] != '\0')
+		add_history(process->line);
+	token = ft_strtok(process->line, " ");
 	while (token)
 	{
 		ft_lstadd_back(&ptr_built->tokens, ft_lstnew(token));
 		token = ft_strtok(NULL, " ");
 	}
-	return (free(shell->line), shell->line = NULL, 1);
+	return (free(process->line), process->line = NULL, 1);
 }
