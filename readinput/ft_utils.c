@@ -1,20 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_content.c                                       :+:      :+:    :+:   */
+/*   ft_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:28:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/04 22:24:46 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/06 22:10:47 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_content(t_subproc *process, char *token)
+int	ft_checkpair(char *str, char ch)
 {
-	(void)process;
-	(void)token;
-	return (NULL);
+	int	pair;
+	int	i;
+
+	pair = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ch)
+			pair++;
+		i++;
+	}
+	if (pair % 2 == 0)
+		return (1);
+	return (0);
+}
+
+int	ft_getidx(char *token, char type)
+{
+	int	i;
+
+	i = 0;
+	while (token[i] && token[i] != type)
+		i++;
+	return (i);
 }

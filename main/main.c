@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:50:39 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/05 17:35:25 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:28:10 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,23 +184,13 @@ Your program has to implement:
 	✅"~" = /home/user. Whenever our minishell will see that will replace it with the mentioned path		
 	✅* parsing the built ins commands should be done into a separate function that will returns 0 if there was a problem and > 0 if there are none.
 	✅* every bulitin command should operate in the original process, not a child
-	I.		cd command:		Change current working directory (use chdir())
-				protect returns
-				print required arguments (token)/if its not, we are going back to the start cwd
-				chdir returns 0 if success
-				don't forget to implement ../../../ (thought: counting sequence "../" and then backward as many folders as sequence are)
-				
-				cd / -> will returns you to the root path
-					-> in our case will returns at the home shell (minishell's dir)
-
-
+	✅		cd command:		Change current working directory (use chdir())
 	✅II.		pwd command:	Print current directory (use getcwd())
 				getcwd(buffer_str, buffer_size) -> buffer size is usual 4096
 				store the result of getcwd into a string for better usecase
 					ex: char	*store_cwd = getcwd(NULL, 0); -> will show the current work directory
 				don't manage the rest of arguments (tokens) after pwd
 				don't forget to free the store_cwd string after use;
-	
 	III.	echo command:	Print arguments to stdout
 				*   treat the flag -n properly -> deletes the \n char
 				*   doesn't recognize simple backslash
@@ -236,7 +226,6 @@ Your program has to implement:
 				| $$ - print parent process id with getppid(); |
 				'----------------------------------------------'
 				the differences between getpid and getppid is that the getpid returns the id of the current instance execution and get ppid returns the id of the whole process of file we are working on
-				
 	✅IV.		env command:	Print all environment variables
 				should be stipulated on the main
 	✅V.		exit command is a simple EXIT_SUCCESS(0)/FAILURE(nonzero) (Exit the shell)
@@ -270,7 +259,7 @@ Your program has to implement:
 						$>	exit
 
 		.---------------------------------------------------------------.
-		| history command:		Optional — store & print input commands |
+	✅  | history command:		Optional — store & print input commands |
 		'---------------------------------------------------------------'
 
 [IMPLEMENTING SIGNAL HANDLER]	EXIT/SUSPEND ANY ONGOING PROCESS SIGNALS 

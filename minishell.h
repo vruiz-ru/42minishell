@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/06 10:39:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/06 22:11:04 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,6 @@ void	ft_appendre(t_subproc *process);
 void	ft_heredoc(t_subproc *process);
 int		ft_reinput(t_subproc *process);
 int		ft_reoutput(t_subproc *process);
-int		ft_dquotes(t_subproc *process, char *token);
-int		ft_squotes(t_subproc *process, char *token);
 char	*ft_getcwd(void);
 // BUILTINS
 int		ft_builtins(t_subproc *process);
@@ -107,7 +105,9 @@ int		ft_cd(t_subproc *process);
 // HANDLERS
 void	handle_sigint(int sig);
 // READINPUT
+int		ft_getidx(char *token, char type);
+int		ft_checkpair(char *str, char ch);
+int		create_tokens(t_subproc *process);
 int		ft_readinput(t_subproc *proc);
-char	*ft_content(t_subproc *process, char *token);
 
 #endif
