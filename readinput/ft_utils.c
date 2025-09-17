@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:28:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/06 22:10:47 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/12 10:47:36 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	ft_checkpair(char *str, char ch)
 
 	pair = 0;
 	i = 0;
+    ft_printf("str in checkpair -> %s\n", str);
 	while (str[i])
 	{
 		if (str[i] == ch)
@@ -30,12 +31,31 @@ int	ft_checkpair(char *str, char ch)
 	return (0);
 }
 
-int	ft_getidx(char *token, char type)
+int	ft_getquote_idx(char *token, char type)
 {
-	int	i;
-
-	i = 0;
-	while (token[i] && token[i] != type)
-		i++;
-	return (i);
+	char	*normal;
+	char	*dquotes;
+	char	*squotes;
+	int		idx_normal;
+	int		idx_dquote;
+	int		idx_squote;
+	
+	normal = ft_strchr(token, ' ');
+	dquotes = ft_strchr(token, '"');
+	squotes = ft_strchr(token, '\'');
+	if (type == '"' && dquotes == NULL)
+		return (-1);
+	if (type == '\'' && squotes == NULL)
+		return (-1);
+	idx_dquote = dquotes - token;
+	idx_squote = squotes - token;
+	idx_normal = -1;
+	if (normal)
+		idx_normal = normal - token;
+    // ft_printf("dquotes idx -> %d\nsquotes idx -> %d\nnormal idx -> %d\n", idx_dquote, idx_squote, idx_normal);
+	if (type == '"' && (idx_normal < 0 || idx_dquote < idx_normal))
+		return (idx_dquote);
+	if (type == '\'' && (idx_normal < 0 || idx_squote < idx_normal))
+		return (idx_squote);
+	return (-1);
 }

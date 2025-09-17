@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:50:39 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/06 12:28:10 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/09/17 20:57:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	reset_utils(t_subproc **process)
 	(*process)->builtins->flags = false;
 	(*process)->builtins->in_file = false;
 	(*process)->builtins->out_file = false;
-    if ((*process)->prompt)
-        free((*process)->prompt);
-    (*process)->prompt = NULL;
+	if ((*process)->prompt)
+		free((*process)->prompt);
+	(*process)->prompt = NULL;
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -37,12 +37,22 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
-        if (!ft_readinput(process))
+		// ft_printf("here1");
+		if (!ft_readinput(process))
 			return (0);
+		// ft_printf("here2");
 		if (!ft_builtins(process))
 			return(0);
-        shell->status = 0;
+		// ft_printf("here3");
+		shell->status = 0;
+		t_list *ptr = process->builtins->tokens;
+		while (ptr)
+		{
+			ft_printf("token -> %s\n", (char *)ptr->content);
+			ptr = ptr->next;
+		}
 		reset_utils(&process);
+		// ft_printf("here4");
 	}
 	return (0);
 }
@@ -266,7 +276,7 @@ Your program has to implement:
 
 							✅  SIGINT (CTRL + C) - EXIT
 							✅  CTRL + D - SENDS EOF
-                                CTRL + / - UNDO
+								CTRL + / - UNDO
 
 
 ✅6.[DESIGN IDEA] not to forget to implement the current working directory inside of command line as we navigate thru the shell

@@ -67,5 +67,5 @@
     "cstdlib": "c",
     "strings.h": "c",
     "signal.h": "c"
-}
+  }
 }

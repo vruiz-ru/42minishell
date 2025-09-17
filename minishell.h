@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/06 22:11:04 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/07 18:01:18 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int		ft_cd(t_subproc *process);
 // HANDLERS
 void	handle_sigint(int sig);
 // READINPUT
-int		ft_getidx(char *token, char type);
+int		ft_getquote_idx(char *token, char type);
 int		ft_checkpair(char *str, char ch);
 int		create_tokens(t_subproc *process);
 int		ft_readinput(t_subproc *proc);

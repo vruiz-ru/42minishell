@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 19:59:40 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/06 22:21:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/08/06 23:44:10 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ resolve readinput tokenization
 update added values
 double quotes resolve
 resolve echo
+resolve cd "        foldername" case
 
 */
