@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 08:07:22 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 13:38:15 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:50:32 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,11 @@ int	up_feature(t_subproc *process)
 {
 	char	*token;
 	char	*path;
-
+	int		size;
+	
+	size = ft_strlen(process->current_wd);
+	if (!ft_strncmp(process->current_wd, process->ptr_main->home_path, size))
+		return (1);
 	path = (char *)process->builtins->tokens->next->content;
 	token = ft_strtok(path, "/");
 	while (token)

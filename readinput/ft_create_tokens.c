@@ -6,89 +6,72 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 22:07:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 13:19:28 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:13:01 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	ft_cmd_token(t_subproc *process)
-{
-	char	*cmd;
-
-	if (!process->line)
-		return (0);
-	cmd = ft_strtok(process->line, " ");
-	ft_lstadd_back(&process->builtins->tokens, ft_lstnew(cmd));
-	return (1);
-}
-
 static char	*ft_normal_token(t_list *tokens, char *line)
 {
-	char	*new;
-	char	*res;
-	int		size;
-	int		length;
+	if (*line && line)
+	{
+		ft_lstadd_back(&tokens, ft_lstnew(ft_strdup(line)));
+		free(line);
+	}
+	return (NULL);
+}
 
-	
-	new = ft_strtok(NULL, " ");
-	if (!new)
-		return (NULL);
-	ft_lstadd_back(&tokens, ft_lstnew(new));
-	size = ft_strlen(line);
-	length = ft_strlen(new);
-	res = ft_strdup(ft_strnstr(line, new, size) + length);
-	free(line);
-	return (res);}
-
-char	*ft_quotes_token(t_list *tokens, char *line, char ch)
+static char	*ft_quotes_token(t_list *tokens, char *line, char delim)
 {
-	char	*temp_token;
-	char	delim[2];
 	char	*new;
-	char	*res;
-	int		closed_quotes;
+	char	*line_left;
+	int     start_idx;
+	int		end_idx;
+	int     size;
 
-	delim[0] = ch;
-	delim[1] = '\0';
-	new = NULL;
-	temp_token = ft_strtok(NULL, delim);
-	if (ft_checkpair(temp_token, ch))
-		new = ft_strjoin_free(new, temp_token);
-	else
-		new = ft_strjoin_free(temp_token, ft_strtok(NULL, delim));
+	line_left = NULL;
+	start_idx = ft_quote_occurrence(line, delim, 1);
+	if (start_idx < 0)
+		return (line);
+	if (start_idx > 0)
+		ft_lstadd_back(&tokens, ft_lstnew(ft_substr(line, 0, start_idx)));
+	end_idx = ft_quote_occurrence(line, delim, 2);
+	new = ft_substr(line, start_idx + 1, end_idx - (start_idx + 1));
 	if (new == NULL)
 		return (perror("malloc"), NULL);
 	ft_lstadd_back(&tokens, ft_lstnew(new));
-	closed_quotes = ft_strlen(new) + 1;
-	res = ft_strdup(ft_strnstr(line, new, ft_strlen(line)) + closed_quotes);
+	size = (ft_strlen(line) - 1) - end_idx;
+	if (size > 0)
+		line_left = ft_substr(line, ++end_idx, size);
 	free(line);
-	return (res);
+	if (!ft_strchr(line_left, '\'') || !ft_strchr(line_left, '"'))
+		return (ft_lstadd_back(&tokens, ft_lstnew(line_left)), NULL);
+	return (line_left);
 }
 
 int	ft_create_tokens(t_subproc *process)
 {
-	char	*line;
+	t_list	**temp;
+	char	*line_args;
 	int		dquote_idx;
 	int		squote_idx;
 
-	if (!ft_cmd_token(process))
-		return (0);
-	if (!ft_strchr(process->line, ' '))
-		return (1);
-	line = ft_strdup(ft_strchr(process->line, ' ') + 1);
-	while (*line && line)
+	temp = &process->builtins->tokens;
+	ft_lstadd_back(temp, ft_lstnew(ft_strtok(process->line, " ")));
+	line_args = ft_strtok(NULL, " ");
+	while (line_args)
 	{
-		dquote_idx = ft_getquote_idx(line, '"');
-		squote_idx = ft_getquote_idx(line, '\'');
-		if (dquote_idx >= 0 && \
-			(squote_idx < 0 || \
+		dquote_idx = ft_quote_occurrence(line_args, '"', 1);
+		squote_idx = ft_quote_occurrence(line_args, '\'', 1);
+		if (dquote_idx >= 0 && (squote_idx < 0 || \
 			(squote_idx >= 0 && dquote_idx < squote_idx)))
-			line = ft_quotes_token(process->builtins->tokens, line, '"');
+			line_args = ft_quotes_token(*temp, line_args, '"');
 		else if (squote_idx >= 0)
-			line = ft_quotes_token(process->builtins->tokens, line, '\'');
+			line_args = ft_quotes_token(*temp, line_args, '\'');
 		else
-			line = ft_normal_token(process->builtins->tokens, line);
+			line_args = ft_normal_token(*temp, line_args);
+		line_args = ft_strtok(NULL, " ");
 	}
 	return (1);
 }

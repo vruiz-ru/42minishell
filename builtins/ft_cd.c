@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 20:06:37 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 13:19:05 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:51:03 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ int ft_cd(t_subproc *process)
 		return (ft_putstr_fd("cd: invalid options\n", 1), 1);
 	if (path_input(process))
 		return (1);
-	if ((!ft_strncmp("..", feature, size) || ft_strnstr(feature, "../", 3)) \
-		&& !ft_strchr(process->prompt, '~'))
+	if (!ft_strncmp(feature, "..", size) || ft_strnstr(feature, "../", 3))
 		return (up_feature(process));
 	if (ft_strnstr(feature, "~/", 2) || feature[0] == '~')
 		return (home_feature(process));

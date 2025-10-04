@@ -1,0 +1,11 @@
+
+echo \"outside" infirst\"inquoted\"inlast"outside
+echo \"outside"infirst\"inquoted\"inlast"outside  'seco'nd_a'rgument' third_arument
+
+ t_list *ptr = process->builtins->tokens;
+    while (ptr)
+    {
+        ft_printf("content --> %s\n", (char *)ptr->content);
+        ptr = ptr->next;
+    }
+	ft_printf("in readinput after show content\n");

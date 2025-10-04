@@ -6,49 +6,35 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:28:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 13:20:46 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/04 20:29:13 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_checkpair(char *str, char ch)
+int	ft_quote_occurrence(char *str, char ch, int times)
 {
-	int	pair;
-	int	i;
+	int	idx;
+	int	ocurr;
+	int quote_idx;
 
-	pair = 0;
-	i = 0;
-	while (str[i])
+	quote_idx = -1;
+	if (str)
 	{
-		if (str[i] == ch)
-			pair++;
-		i++;
+		idx = 0;
+		ocurr = 0;
+		while (str[idx])
+		{
+			if (str[idx] == ch && str[idx - 1] != '\\')
+			{
+				ocurr++;
+				quote_idx = idx;
+			}
+			if (ocurr == times)
+				break;
+			idx++;
+		}
 	}
-	// ft_printf("pair result -->> %d\non string -->> %s\n", pair, str);
-	if (pair % 2 == 0)
-		return (1);
-	return (0);
+	return (quote_idx);
 }
 
-int	ft_getquote_idx(char *token, char type)
-{
-	int		idx_normal;
-	int		idx_dquote;
-	int		idx_squote;
-	
-	idx_normal = -1;
-    idx_squote = -1;
-    idx_dquote = -1;
-    if (type == '"' && ft_strchr(token, '"'))
-        idx_dquote = ft_strchr(token, '"') - token;
-	else if (type == '\'' && ft_strchr(token, '\''))
-		idx_squote = ft_strchr(token, '\'') - token; 
-	else if (ft_strchr(token, ' '))
-		idx_normal = ft_strchr(token, ' ') - token;
-	if (type == '"' && (idx_normal < 0 || idx_dquote > idx_normal))
-		return (idx_dquote);
-	if (type == '\'' && (idx_normal < 0 || idx_squote > idx_normal))
-		return (idx_squote);
-	return (-1);
-}
