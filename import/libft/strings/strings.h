@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 16:59:34 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/06 16:33:43 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/07 13:56:26 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strjoin_free(char const *s1, char const *s2);
+char	*ft_addchar(char *str, char ch);
 // splitting or tokenizing
 char	**ft_split(char *s, char c);
 char	*ft_strtok(char *str, const char *delim);

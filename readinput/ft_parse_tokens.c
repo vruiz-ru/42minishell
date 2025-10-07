@@ -6,60 +6,80 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 13:53:45 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 14:51:01 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/07 14:33:37 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-/*
-static void	compare_lists(t_list **l1, t_list **l2)
-{
-	t_list	*ptr_l1;
-	t_list	*ptr_l2;
 
-	ptr_l1 = *l1;
-	ptr_l2 = *l2;
-	if (ft_lstsize(ptr_l2) > ft_lstsize(ptr_l1))
-	{
-		ft_lstclear(l1, free);
-		*l1 = *l2;
-	}
-	else
-		ft_lstclear(l2, free);
+static int  ft_wildcards(char *str, char *wildcards)
+{
+    int i;
+
+    i = 0;
+    while (str[i] != '\0')
+    {
+        if (ft_strchr(wildcards, str[i]))
+            return (1);
+        i++;
+    }
+    return (0);
 }
 
-static void	ft_getvalue(t_list **new, char *content)
+static char *ft_cleanline(char *content)
 {
-	if (ft_wildcard(content))
-		do_this();
-	if (ft_squotes(content))
-		do_this();
-	if (ft_dquotes(content) || ft_noquotes(content))
-		do_this();
-	}
+    char    *new;
+    int     i;
+
+    i = 0;
+    new = NULL;
+    if (!content || !*content)
+        return (NULL);
+    while (content[i] != '\0')
+    {
+        if (content[i] == '\\')
+            i++;
+        if (content[i] != '\0')
+            new = ft_addchar(new, content[i]);
+        i++;
+    }
+    free(content);
+    return (new);
 }
 
-int	ft_parse_tokens(t_subproc *process)
+char    *ft_build_line(char *content)
+{
+    char    *new;
+    int     i;
+
+    i = 0;
+    new = ft_cleanline(content);
+    if (!new)
+        return (NULL);
+    while (new[i])
+}
+
+char	*ft_parse_tokens(t_subproc *process)
 {
 	t_list	*tokens;
-	t_list  *new;
-	char	*token;
+    t_list  *temp;
+    char    *content;
+	char	*new_line;
 
 	tokens = process->builtins->tokens;
-	new = NULL;
+	new_line = NULL;
 	while (tokens)
 	{
-		token = tokens->content;
-		if (ft_strchr(token, '$'))
-			ft_getvalue(&new, token);
-		else if (!new)
-			ft_lstnew(token);
-		else
-			ft_lstadd_back(&new, ft_lstnew(token));
-		tokens = tokens->next;
+		content = tokens->content;
+        if (ft_wildcards(content, "\\\"'$"))
+            new_line = ft_build_line(content);
+        else if (new_line == NULL)
+            new_line = ft_strdup(content);
+        else
+            new_line = ft_strjoin_free(new_line, content);
+        temp = tokens->next;
+        ft_lstdelone(tokens, free);
+		tokens = temp;
 	}
-	compare_lists(&tokens, &new);
 	return (1);
 }
-
-*/

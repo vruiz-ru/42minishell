@@ -2,7 +2,20 @@
 echo \"outside" infirst\"inquoted\"inlast"outside
 echo \"outside"infirst\"inquoted\"inlast"outside  'seco'nd_a'rgument' third_arument
 
- t_list *ptr = process->builtins->tokens;
+
+echo noquotes at the beginning " start doublequotes 'singlequotes' ending doublequotes " 'start simplequotes"doublquotes" endsimplequotes' noquotesatall
+
+1 * 8^1 + 3 * 8^0 + 5 * 8^-1 + 7 * 8^-2 + 6 * 8^-3 + 3 * 8^-4 = ~ 11,74
+
+
+" asdsadas dasd asa'' asdsadsadsa " 'asdasdsada  a dsa"sadasdas" asdsa' asdsadsadad
+
+01234567890123456789012345678901234567890123456789012345678901234567890123456789012
+
+0                                 35
+
+()(((((((((((((((((())))))))))))))))))
+t_list *ptr = process->builtins->tokens;
     while (ptr)
     {
         ft_printf("content --> %s\n", (char *)ptr->content);

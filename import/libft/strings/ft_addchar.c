@@ -1,24 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   ft_addchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 13:45:48 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/07 13:30:52 by aghergut         ###   ########.fr       */
+/*   Created: 2025/10/07 13:50:23 by aghergut          #+#    #+#             */
+/*   Updated: 2025/10/07 14:11:14 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lists.h"
+#include "strings.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
+char	*ft_addchar(char *str, char ch)
 {
-	if (lst)
+	char	*new;
+	size_t	new_size;
+	size_t	i;
+
+	if (!str || !*str)
+		new_size = 1;
+	else
+		new_size = ft_strlen(str) + 1;
+	new = malloc((new_size + 1) * sizeof(char));
+	if (!new)
+		return (NULL);
+	i = 0;
+	while (str && str[i] != '\0')
 	{
-		if (del && lst->content)
-			del(lst->content);
-		free(lst);
-		lst = NULL;
+		new[i] = str[i];
+		i++;
 	}
+	new[i++] = ch;
+	new[i] = '\0';
+	if (str)
+		free(str);
+	str = NULL;
+	return (new);	
 }

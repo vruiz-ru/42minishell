@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 22:07:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 22:13:01 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/07 13:18:46 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,22 @@ static char	*ft_normal_token(t_list *tokens, char *line)
 		free(line);
 	}
 	return (NULL);
+}
+
+static int ft_quotes_left(t_list *tokens, char *line_left)
+{
+	if (!ft_strchr(line_left, '\'') && !ft_strchr(line_left, '"'))
+	{
+		if (line_left && *line_left == ' ')
+		{
+			ft_lstadd_back(&tokens, ft_lstnew(ft_strdup(" ")));
+			ft_lstadd_back(&tokens, ft_lstnew(ft_strdup(line_left + 1)));
+		}
+		else
+			ft_lstadd_back(&tokens, ft_lstnew(line_left));
+		return (0);
+	}
+	return (1);
 }
 
 static char	*ft_quotes_token(t_list *tokens, char *line, char delim)
@@ -45,8 +61,8 @@ static char	*ft_quotes_token(t_list *tokens, char *line, char delim)
 	if (size > 0)
 		line_left = ft_substr(line, ++end_idx, size);
 	free(line);
-	if (!ft_strchr(line_left, '\'') || !ft_strchr(line_left, '"'))
-		return (ft_lstadd_back(&tokens, ft_lstnew(line_left)), NULL);
+	if (!ft_quotes_left(tokens, line_left))
+		return (NULL);
 	return (line_left);
 }
 
@@ -59,7 +75,9 @@ int	ft_create_tokens(t_subproc *process)
 
 	temp = &process->builtins->tokens;
 	ft_lstadd_back(temp, ft_lstnew(ft_strtok(process->line, " ")));
-	line_args = ft_strtok(NULL, " ");
+	if (!ft_strchr(process->line, ' '))
+		return (1);
+	line_args = ft_strdup(ft_strchr(process->line, ' ') + 1);
 	while (line_args)
 	{
 		dquote_idx = ft_quote_occurrence(line_args, '"', 1);
@@ -71,7 +89,6 @@ int	ft_create_tokens(t_subproc *process)
 			line_args = ft_quotes_token(*temp, line_args, '\'');
 		else
 			line_args = ft_normal_token(*temp, line_args);
-		line_args = ft_strtok(NULL, " ");
 	}
 	return (1);
 }
