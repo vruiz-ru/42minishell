@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:50:39 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/09 13:00:07 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 11:36:42 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,11 +176,11 @@ Your program has to implement:
 */
 
 /* auxiliary ideas for implementing the prototype of the project
-0.[STRCMP] !! all checks between strings (user input, commands, etc.) should be done with ft_strcmp!!!
+✅[STRCMP] !! all checks between strings (user input, commands, etc.) should be done with ft_strcmp!!!
 
-3.[CHECKING ARGS/TOKENS]  checking the input/tokens (what tokens actually stand for is the command, its flags, and path/input)
+✅[CHECKING ARGS/TOKENS]  checking the input/tokens (what tokens actually stand for is the command, its flags, and path/input)
 
-✅4. [STRTOK] Implemented
+✅[STRTOK] Implemented
 
 5.[BUILTINS]  builtin commands:
 	✅"~" = /home/user. Whenever our minishell will see that will replace it with the mentioned path		
@@ -193,7 +193,7 @@ Your program has to implement:
 					ex: char	*store_cwd = getcwd(NULL, 0); -> will show the current work directory
 				don't manage the rest of arguments (tokens) after pwd
 				don't forget to free the store_cwd string after use;
-	III.	echo command:	Print arguments to stdout
+	✅🚫III.	echo command:	Print arguments to stdout
 				*   treat the flag -n properly -> deletes the \n char
 				*   doesn't recognize simple backslash
 						ex: echo \new -> new
@@ -227,6 +227,15 @@ Your program has to implement:
 				.----------------------------------------------.
 				| $$ - print parent process id with getppid(); |
 				'----------------------------------------------'
+                🚫 -> not resolved >> > < << cases
+                🚫 -> implement variables $? $$   
+                        $0  The name of the current shell or script
+                        $1, $2, ...	Positional parameters
+                        $#	Number of positional arguments
+                        $@ / $*	All positional arguments
+                        $!	PID of the most recent background command
+                        $_	Last argument of the previous command
+                
 				the differences between getpid and getppid is that the getpid returns the id of the current instance execution and get ppid returns the id of the whole process of file we are working on
 	✅IV.		env command:	Print all environment variables
 				should be stipulated on the main
@@ -259,7 +268,6 @@ Your program has to implement:
 						$>	bash     
 						$>	echo $MYVAR
 						$>	exit
-
 		.---------------------------------------------------------------.
 	✅  | history command:		Optional — store & print input commands |
 		'---------------------------------------------------------------'

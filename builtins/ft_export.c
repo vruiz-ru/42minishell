@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 19:51:21 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 20:21:01 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 11:23:22 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,38 +30,40 @@ static int	check_transfer(t_subproc *process, char *var)
 	return (1);
 }
 
-static int	check_update(char **map, char *var_name)
+static int	check_update(char **map, char *var)
 {
-	int idx;
+	int 	env_idx;
 	
-	idx = ft_mapitem_index(map, var_name);
-	if (idx < 0)
+	env_idx = ft_mapitem_index(map, var);
+	if (env_idx < 0)
 		return (0);
-	if (!ft_mapitem_replace(&map, var_name, idx))
+	if (!ft_mapitem_replace(&map, var, env_idx))
 		return (0);
 	return (1);
 }
 
 int ft_export(t_subproc *process)
 {
-	t_list	*ptr_tokens;
-	char	*var;
-	int		check;
+	char	*line;
+	char	*arg;
 	bool	done;
 	
-	ptr_tokens = process->builtins->tokens->next;
-	while (ptr_tokens)
+	ft_clear_strtok();
+	line = ft_construct_line(process->builtins->tokens);
+	arg = ft_strtok(line, " ");
+	if (!arg)
+		return (0);
+	while (arg)
 	{
 		done = false;
-		var = (char *)ptr_tokens->content;
-		check = check_update(process->local_env, var);
-		if (check)
+		if (check_update(process->local_env, arg))
 			done = true;
-		if (done == false && check_transfer(process, var))
+		if (done == false && check_transfer(process, arg))
 			done = true;
-		if (done == false && !ft_mapitem_add(&process->local_env, var))
+		if (done == false && !ft_mapitem_add(&process->local_env, arg))
 			return (0);
-		ptr_tokens = ptr_tokens->next;
+		free(arg);
+		arg = ft_strtok(NULL, " ");
 	}
-	return (1);
+	return (free(line), free(arg), 1);
 }

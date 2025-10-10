@@ -6,7 +6,7 @@
 #    By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/24 13:18:15 by aghergut          #+#    #+#              #
-#    Updated: 2025/10/09 12:35:20 by aghergut         ###   ########.fr        #
+#    Updated: 2025/10/10 11:25:39 by aghergut         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,8 +51,9 @@ SRCS1 =	$(BUILTINS_DIR)ft_builtins.c $(BUILTINS_DIR)ft_cd.c \
 		$(BUILTINS_DIR)ft_pwd.c $(BUILTINS_DIR)ft_getenv.c \
 		$(BUILTINS_DIR)ft_unset.c
 
-SRCS2 = $(READINPUT_DIR)ft_quotes_utils.c $(READINPUT_DIR)ft_create_tokens.c \
-		$(READINPUT_DIR)ft_parse_utils.c $(READINPUT_DIR)ft_readinput.c 
+SRCS2 = $(READINPUT_DIR)ft_quotes.c $(READINPUT_DIR)ft_nonquotes.c \
+		$(READINPUT_DIR)ft_quotes_utils.c $(READINPUT_DIR)ft_parse_utils.c \
+		$(READINPUT_DIR)ft_create_tokens.c $(READINPUT_DIR)ft_readinput.c 
 
 SRCS3 =	$(HANDLERS_DIR)ft_sigint.c
 
@@ -61,7 +62,8 @@ SRCS4 =	$(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_getvar.c \
 		$(UTILS_DIR)ft_cd_feats.c $(UTILS_DIR)ft_cd_utils.c \
 		$(UTILS_DIR)ft_appendre.c $(UTILS_DIR)ft_heredoc.c \
 		$(UTILS_DIR)ft_reinput.c $(UTILS_DIR)ft_reoutput.c \
-		$(UTILS_DIR)ft_prompt.c 
+		$(UTILS_DIR)ft_prompt.c $(UTILS_DIR)ft_clear_strtok.c \
+		$(UTILS_DIR)ft_construct_line.c
 
 SRCS5 =	$(MAIN_DIR)main.c
 

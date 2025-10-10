@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/09 13:00:19 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 11:04:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int		ft_getenv(t_subproc *process);
 int		ft_unset(t_subproc **process);
 int		ft_echo(t_subproc *process);
 int		ft_cd(t_subproc *process);
-// BUILTINS UTILS
+// UTILS
 int 	path_input(t_subproc *process);
 int		invalid_options(char *token);
 void	ft_setpaths(t_subproc *process);
@@ -102,10 +102,14 @@ void	ft_heredoc(t_subproc *process);
 int		ft_reinput(t_subproc *process);
 int		ft_reoutput(t_subproc *process);
 char	*ft_getcwd(void);
+void	ft_clear_strtok(void);
+char	*ft_construct_line(t_list *tokens);
 // HANDLERS
 void	handle_sigint(int sig);
 // READINPUT
 int		ft_readinput(t_subproc *proc);
+int		ft_quotes(t_subproc *process, char *line);
+int		ft_nonquotes(t_subproc *process, char *line);
 // PARSE TOKENS
 char	*clean_line(char *content, char token);
 void 	scan_char(char *content, char **var_name, int *idx);

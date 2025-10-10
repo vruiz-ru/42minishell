@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:28:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/09 12:25:56 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 11:31:37 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int quotes_left(t_list *tokens, char *line_left)
 	if (line_left && *line_left == ' ')
 	{
 		space = ft_strdup(" ");
-		temp = ft_strdup(line_left + 1);
+		temp = ft_strdup(line_left);
 		if (!space || !temp)
 			return (perror("malloc"), 0);
 		ft_lstadd_back(&tokens, ft_lstnew(space));
@@ -69,7 +69,7 @@ int quotes_left(t_list *tokens, char *line_left)
 	}
 	else
 	{
-		temp = ft_strdup(line_left + 1);
+		temp = ft_strdup(line_left);
 		if (!temp)
 			return (perror("malloc"), 0);
 		ft_lstadd_back(&tokens, ft_lstnew(temp));

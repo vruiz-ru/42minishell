@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 19:59:40 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/09 13:04:41 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 11:23:13 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,9 @@
 */
 int	ft_echo(t_subproc *process)
 {
-	t_list  *tokens;
-	char    *content;
 	char	*res;
-	int		i;
 	
-	tokens = process->builtins->tokens->next;
-	res = NULL;
-	while (tokens)
-	{
-		i = -1;
-		content = (char *)tokens->content;
-		while (content[++i])
-			res = ft_addchar(res, content[i]);
-		tokens = tokens->next;
-	}
+	res = ft_construct_line(process->builtins->tokens);
 	ft_printf("%s\n",res);
 	return (free(res), 1);
 }
