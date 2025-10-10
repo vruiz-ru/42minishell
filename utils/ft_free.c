@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:20:33 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 10:40:49 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 12:53:50 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	free_subprocess(t_subproc *ptr)
 		free(ptr->current_wd);
 	if (ptr->last_wd)
 		free(ptr->last_wd);
+	if (ptr->last_arg)
+		free(ptr->last_arg);
 	if (ptr->ptr_main)
 		free_main(ptr->ptr_main);
 	if (ptr)

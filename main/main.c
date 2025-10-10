@@ -6,14 +6,25 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:50:39 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 11:36:42 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 13:25:21 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void	add_last_arg(t_subproc *process)
+{
+	t_list	*last_node;
+	
+	last_node = ft_lstlast(process->builtins->tokens);
+	if (process->last_arg)
+		free(process->last_arg);
+	process->last_arg = ft_strdup((char *)last_node->content);
+}
+
 void	reset_utils(t_subproc **process)
 {
+	add_last_arg(*process);   
 	if ((*process)->builtins->tokens)
 		ft_lstclear(&(*process)->builtins->tokens, free);
 	(*process)->builtins->tokens = NULL;
@@ -227,15 +238,15 @@ Your program has to implement:
 				.----------------------------------------------.
 				| $$ - print parent process id with getppid(); |
 				'----------------------------------------------'
-                🚫 -> not resolved >> > < << cases
-                🚫 -> implement variables $? $$   
-                        $0  The name of the current shell or script
-                        $1, $2, ...	Positional parameters
-                        $#	Number of positional arguments
-                        $@ / $*	All positional arguments
-                        $!	PID of the most recent background command
-                        $_	Last argument of the previous command
-                
+				🚫 -> not resolved >> > < << cases
+				🚫 -> implement variables $? $$   
+						$0  The name of the current shell or script
+						$1, $2, ...	Positional parameters
+						$#	Number of positional arguments
+						$@ / $*	All positional arguments
+						$!	PID of the most recent background command
+						$_	Last argument of the previous command
+				
 				the differences between getpid and getppid is that the getpid returns the id of the current instance execution and get ppid returns the id of the whole process of file we are working on
 	✅IV.		env command:	Print all environment variables
 				should be stipulated on the main

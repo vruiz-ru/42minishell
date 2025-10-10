@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:19:55 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/09 12:50:30 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 14:56:49 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,30 @@ char	*clean_line(char *content, char token)
 {
 	char    *seq;
 	char	*new;
+	bool	found;
 	int		i;
 
-	i = 0;
+	i = -1;
 	new = NULL;
 	seq = "`\"\\";
 	if (token == 'n')
-		seq = " \t\n`\"'\\*?[]#&;|<>()~";    
-	if (!content || !*content)
-		return (NULL);
-	while (content[i] != '\0')
+		seq = " tn`\"'\\*?[]#&;|<>()~";    
+	while (content[++i] != '\0')
 	{
+		found = false;
 		if (content[i] == '\\' && ft_strchr(seq, content[i + 1]))
+		{
 			i++;
-		new = ft_addchar(new, content[i]);
-		i++;
+			new = ft_addchar(new, content[i]);
+			found = true;		
+		}
+		if (found == false)
+			new = ft_addchar(new, content[i]);
 	}
 	return (free(content), new);
 }
 
-void scan_char(char *content, char **var_name, int *idx)
+void scan_char(t_subproc *process, char *content, char **var_name, int *idx)
 {
 	char    *stop;
 
@@ -84,6 +88,8 @@ void scan_char(char *content, char **var_name, int *idx)
 	else if (content[*idx] == '$')
 	{
 		(*idx)++;
+		if (ft_special_vars(process, var_name, content[*idx]))
+			return ;
 		while (content[*idx] != '\0' && !ft_strchr(stop, content[*idx]))
 		{
 			*var_name = ft_addchar(*var_name, content[*idx]);
@@ -104,4 +110,5 @@ void	insert_value(t_subproc *process, char **dest, char *var_name)
 		assign_value(local_env, dest, var_name);
 	else if (is_within(buffer_env, var_name))
 		assign_value(buffer_env, dest, var_name);
+	free(var_name);
 }

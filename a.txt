@@ -1,5 +1,5 @@
 .-------------------------------------------------------------------------------------------------------------------------------------------------------------.
-| echo noquotes at all \" \\ \$ \' end noquotes "inside dquotes \\ \'\"\$ '$TERM_PROGRAM' end dquotes" 'inside squotes \" \\ \$ "\$TERM_PROGRAM" end squotes' |
+| echo noquotes at all \" \\ \$ \' end noquotes "inside dquotes \\ \'\"\$ '$TERM_PROGRAM' end dquotes" 'inside squotes \" \\\ \$ "\$TERM_PROGRAM" end squotes' |
 '-------------------------------------------------------------------------------------------------------------------------------------------------------------'
     -> bash: noquotes at all " \ $ ' end noquotes inside dquotes \ \'"$ 'xterm-256color' end dquotes inside squotes \" \\ \$ "\$TERM_PROGRAM" end squotes
     -> mine: noquotes at all " \ $ ' end noquotes inside dquotes \ \'"$ 'xterm-256color' end dquotes inside squotes \" \\ \$ "\$TERM_PROGRAM" end squotes

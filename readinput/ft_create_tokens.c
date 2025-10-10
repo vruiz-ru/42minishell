@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 22:07:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 09:14:40 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 14:20:19 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,25 @@ char	*parse_token(t_subproc *process, char *content, char token)
 	char	*var_name;
 	int		i;
 
-	i = 0;
+	i = -1;
 	if (!content || !*content)
 		return (NULL);
 	content = clean_line(content, token);
 	res = NULL;
-	while (content[i] != '\0')
+	while (content[++i] != '\0')
 	{
 		var_name = NULL;
-		scan_char(content, &var_name, &i);
-		if (var_name != NULL)
+		scan_char(process, content, &var_name, &i);
+		if (var_name && process->special_var == false)
 		{
 			insert_value(process, &res, var_name);
 			if (!res)
 				return (NULL);
-			free(var_name);
 		}
-		res = ft_addchar(res, content[i]);
-		i++;
+		if (process->special_var == true)
+			res = ft_strjoin_free(res, var_name);
+		else
+			res = ft_addchar(res, content[i]);
 	}
 	return (free(content), res);	
 }

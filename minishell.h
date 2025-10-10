@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 11:04:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 13:18:13 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,17 @@ typedef struct Builtins
 
 typedef struct Subprocess
 {
+	t_builts	*builtins;
 	char		**local_env;
 	char		**buffer_env;
-	t_builts	*builtins;
 	char		*line;
 	char		*prompt;
 	char		*current_wd;
 	char		*last_wd;
+	char		*last_arg;
+	pid_t       pid;
 	int			exit_status;
+    bool        special_var;
 	t_main		*ptr_main;
 }   t_subproc;
 
@@ -110,9 +113,10 @@ void	handle_sigint(int sig);
 int		ft_readinput(t_subproc *proc);
 int		ft_quotes(t_subproc *process, char *line);
 int		ft_nonquotes(t_subproc *process, char *line);
+int     ft_special_vars(t_subproc *process, char **var_name, char ch);
 // PARSE TOKENS
 char	*clean_line(char *content, char token);
-void 	scan_char(char *content, char **var_name, int *idx);
+void 	scan_char(t_subproc *process, char *content, char **var_name, int *idx);
 void	insert_value(t_subproc *process, char **dest, char *var_name);
 char	*parse_token(t_subproc *process, char *content, char token);
 int		ft_create_tokens(t_subproc *process);

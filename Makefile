@@ -6,7 +6,7 @@
 #    By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/24 13:18:15 by aghergut          #+#    #+#              #
-#    Updated: 2025/10/10 11:25:39 by aghergut         ###   ########.fr        #
+#    Updated: 2025/10/10 12:55:02 by aghergut         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,8 @@ SRCS1 =	$(BUILTINS_DIR)ft_builtins.c $(BUILTINS_DIR)ft_cd.c \
 
 SRCS2 = $(READINPUT_DIR)ft_quotes.c $(READINPUT_DIR)ft_nonquotes.c \
 		$(READINPUT_DIR)ft_quotes_utils.c $(READINPUT_DIR)ft_parse_utils.c \
-		$(READINPUT_DIR)ft_create_tokens.c $(READINPUT_DIR)ft_readinput.c 
+		$(READINPUT_DIR)ft_create_tokens.c $(READINPUT_DIR)ft_special_vars.c \
+		$(READINPUT_DIR)ft_readinput.c 
 
 SRCS3 =	$(HANDLERS_DIR)ft_sigint.c
 

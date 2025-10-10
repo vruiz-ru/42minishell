@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_readinput.c                                     :+:      :+:    :+:   */
+/*   ft_special_vars.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/31 18:35:16 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 13:07:48 by aghergut         ###   ########.fr       */
+/*   Created: 2025/10/10 11:57:13 by aghergut          #+#    #+#             */
+/*   Updated: 2025/10/10 14:05:24 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_readinput(t_subproc *process)
+int ft_special_vars(t_subproc *process, char **var_name, char ch)
 {
-	process->prompt = ft_prompt(process);
-	if (process->prompt == NULL)
-		return (perror("malloc"), 0);
-	process->line = readline(process->prompt);
-	if (process->line == NULL)
+    process->special_var = false;
+	if (ch == '$')
+		*var_name = ft_itoa(process->pid);
+	else if (ch == '?')
+		*var_name = ft_itoa(process->exit_status);
+	else if (ch == '0')
+		*var_name = ft_strdup(process->ptr_main->home_path);
+	else if (ch == '_')
+		*var_name = ft_strdup(process->last_arg);
+	if (*var_name)
 	{
-		free_subprocess(process);
-		exit(EXIT_FAILURE);
-		return (0);
+		process->special_var = true;
+		return (1);
 	}
-	if (process->line[0] != '\0')
-		add_history(process->line);
-	ft_create_tokens(process);
-	return (free(process->line), process->line = NULL, 1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:32:12 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 10:47:40 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/10 13:31:32 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ int	init_subproc(t_main *shell, t_subproc **sub)
 	(*sub)->local_env = ft_mapdup(shell->sh_envp);
 	(*sub)->current_wd = ft_getcwd();
 	(*sub)->last_wd = ft_getcwd();
+	(*sub)->last_arg = ft_strdup(" ");
+	(*sub)->pid  = getpid();
+	(*sub)->special_var = false;
 	return (1);
 }
 
