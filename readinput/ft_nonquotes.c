@@ -6,11 +6,26 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 08:02:20 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 14:09:14 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:54:39 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	add_space(t_list **tokens, char *token)
+{
+	char	*to_add;
+
+	if (token == NULL)
+		return ;
+	to_add = ft_strdup(" ");
+	if (!to_add)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	ft_lstadd_back(tokens, ft_lstnew(to_add));
+}
 
 int		ft_nonquotes(t_subproc *process, char *line)
 {
@@ -28,8 +43,8 @@ int		ft_nonquotes(t_subproc *process, char *line)
 		if (!node)
 			return (perror("malloc"), 0);
 		ft_lstadd_back(&process->builtins->tokens, ft_lstnew(node));
-		ft_lstadd_back(&process->builtins->tokens, ft_lstnew(ft_strdup(" ")));
 		token = ft_strtok(NULL, " ");
+		add_space(&process->builtins->tokens, token);
 	}
 	return (1);
 }

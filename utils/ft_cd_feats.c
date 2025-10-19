@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 08:07:22 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 22:50:32 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:37:55 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,11 @@ int	root_feature(t_subproc *process)
 	char	*path;
 
 	if (ft_lstsize(process->builtins->tokens) > 2)
-		return (ft_putstr_fd("cd: Too many arguments\n", 1), 1);
+    {
+        ft_printf("here?\n");
+        return (ft_putstr_fd("cd: Too many arguments\n", 1), 1);
+    }
+		
 	home_path = process->ptr_main->home_path;
 	path = (char *)process->builtins->tokens->next->content;
 	if (chdir(path) == 0)

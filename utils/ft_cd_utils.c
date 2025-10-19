@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 09:55:23 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 13:36:09 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:44:01 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int path_input(t_subproc *process)
 	if (ft_isalnum(path[0]))
 	{
 		if (ptr->next)
-			return (ft_putstr_fd("cd: too many arguments\n", 1) ,1);
+            return (ft_putstr_fd("cd: too many arguments\n", 1) ,1);
         if (chdir(path) != 0)
 		{
 			ft_printf("cd: %s: No such file or directory\n", path);
