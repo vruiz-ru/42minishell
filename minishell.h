@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 13:18:13 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/20 19:43:12 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int 	init_subproc(t_main *shell, t_subproc **sub);
 int		init_main(t_main **shell, char *name, char *envp[]);
 int		init_builtins(t_builts **builts);
 // BUILTINS
-int		ft_builtins(t_subproc *process);
+void	ft_builtins(t_subproc *process);
 void	ft_clear(void);
 int		ft_exit(t_subproc *process);
 int 	ft_export(t_subproc *process);
@@ -110,7 +110,7 @@ char	*ft_construct_line(t_list *tokens);
 // HANDLERS
 void	handle_sigint(int sig);
 // READINPUT
-int		ft_readinput(t_subproc *proc);
+void	ft_readinput(t_subproc *process);
 int		ft_quotes(t_subproc *process, char *line);
 int		ft_nonquotes(t_subproc *process, char *line);
 int     ft_special_vars(t_subproc *process, char **var_name, char ch);

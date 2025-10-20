@@ -6,26 +6,23 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 18:35:16 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 13:07:48 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/20 19:44:13 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_readinput(t_subproc *process)
+void	ft_readinput(t_subproc *process)
 {
 	process->prompt = ft_prompt(process);
 	if (process->prompt == NULL)
-		return (perror("malloc"), 0);
-	process->line = readline(process->prompt);
-	if (process->line == NULL)
 	{
-		free_subprocess(process);
-		exit(EXIT_FAILURE);
-		return (0);
-	}
-	if (process->line[0] != '\0')
-		add_history(process->line);
+        perror("malloc");
+        return ;
+    }	
+	process->line = readline(process->prompt);
+	if (process->line == NULL || *(process->line) == '\0')
+		return ;
+	add_history(process->line);
 	ft_create_tokens(process);
-	return (free(process->line), process->line = NULL, 1);
 }

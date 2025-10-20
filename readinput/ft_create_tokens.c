@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 22:07:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/19 17:46:18 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/20 20:06:34 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,5 @@ int	ft_create_tokens(t_subproc *process)
 		return (1);
 	if (!ft_nonquotes(process, ptr_line) && !ft_quotes(process, ptr_line))
 		return (0);
-    // t_list *buf = process->builtins->tokens;
-    // while (buf)
-    // {
-    //     ft_printf("token -->> %s\n", (char *)buf->content);
-    //     buf = buf->next;
-    // }
 	return (1);
 }

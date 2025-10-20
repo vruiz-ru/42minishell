@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:50:39 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/19 17:04:25 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/20 19:37:26 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,20 @@ static void	add_last_arg(t_subproc *process)
 {
 	t_list	*last_node;
 	
-	last_node = ft_lstlast(process->builtins->tokens);
-	if (process->last_arg)
+	last_node = NULL;
+	if (process->builtins->tokens)
+		last_node = ft_lstlast(process->builtins->tokens);
+	if (process->last_arg && *(process->last_arg))
 		free(process->last_arg);
-	process->last_arg = ft_strdup((char *)last_node->content);
+	if (last_node)
+		process->last_arg = ft_strdup((char *)last_node->content);
 }
 
 void	reset_utils(t_subproc **process)
 {
-	add_last_arg(*process);   
+	if ((*process)->line)
+		free((*process)->line);
+	add_last_arg(*process);
 	if ((*process)->builtins->tokens)
 		ft_lstclear(&(*process)->builtins->tokens, free);
 	(*process)->builtins->tokens = NULL;
@@ -50,10 +55,8 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
-		if (!ft_readinput(process))
-			return (0);
-		if (!ft_builtins(process))
-			return(0);
+		ft_readinput(process);
+		ft_builtins(process);
 		shell->status = 0;
 		reset_utils(&process);
 	}
