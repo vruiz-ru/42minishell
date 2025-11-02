@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 19:59:40 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 11:23:13 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:35:38 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "builtins.h"
 /*
 
 *   treat the flag -n properly -> deletes the \n char *not applied on the double command case*
@@ -50,11 +50,12 @@
 					getpid returns the id of the current instance execution
 					get ppid returns the id of the whole process of file we are working on
 */
-int	ft_echo(t_subproc *process)
+int	ft_echo(t_process *process)
 {
 	char	*res;
 	
-	res = ft_construct_line(process->builtins->tokens);
+	res = NULL;
+    res = ft_construct(process->tokens, res);
 	ft_printf("%s\n",res);
 	return (free(res), 1);
 }

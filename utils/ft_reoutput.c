@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:48:19 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/04 14:39:12 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:03:47 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../headers/minishell.h"
 
 /* 	">"
 	Redirects the standard output (stdout) of a command to the file given by WORD
@@ -37,7 +37,7 @@
 			# Will create both a & b file
 */
 
-int	ft_reoutput(t_subproc *process)
+int	ft_reoutput(t_process *process)
 {
 	(void)process;
 	return (0);	

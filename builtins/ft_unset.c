@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 18:55:02 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 20:22:43 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 18:54:42 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "builtins.h"
 
 static int	remove_var(char ***env, char *var_name)
 {
@@ -32,19 +32,19 @@ static int	remove_var(char ***env, char *var_name)
 	return (0);
 }
 
-int	ft_unset(t_subproc **process)
+int	ft_unset(t_process **process)
 {
 	t_list	*ptr;
 	char	*var_name;
 	
 
-	if (!process || !(*process)->local_env)
+	if (!process || !(*process)->envs->parent_env)
 		return (0);
-	ptr = (*process)->builtins->tokens->next;
+	ptr = (*process)->tokens->next;
 	while (ptr)
 	{
 		var_name = (char *)ptr->content;
-		remove_var(&(*process)->local_env, var_name);
+		remove_var(&(*process)->envs->parent_env, var_name);
 		ptr = ptr->next;
 	}
 	return (1);

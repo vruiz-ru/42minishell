@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_readinput.c                                     :+:      :+:    :+:   */
+/*   macros.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/31 18:35:16 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/20 19:44:13 by aghergut         ###   ########.fr       */
+/*   Created: 2025/11/02 18:13:18 by aghergut          #+#    #+#             */
+/*   Updated: 2025/11/02 18:14:05 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#ifndef MACROS_H
+# define MACROS_H
 
-void	ft_readinput(t_subproc *process)
-{
-	process->prompt = ft_prompt(process);
-	if (process->prompt == NULL)
-	{
-        perror("malloc");
-        return ;
-    }	
-	process->line = readline(process->prompt);
-	if (process->line == NULL || *(process->line) == '\0')
-		return ;
-	add_history(process->line);
-	ft_create_tokens(process);
-}
+#define PROMPT_ARROW	" 👉 "
+#define PROMPT_HOME		"minishell:~ 👉 "
+#define HOME	"~"
+#define REPLY	"💬"
+#define WRONG	"❓"
+#define NAME	"minishell42"
+#define CLEAR	"\e[1;1H\e[2J"	// \033[H\033[J
+
+#endif

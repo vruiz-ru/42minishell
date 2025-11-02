@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_quotes_utils.c                                  :+:      :+:    :+:   */
+/*   ft_quote_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:28:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 11:31:37 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:43:26 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../input.h"
 
 static void	quote_pos_aux(char **str, int *idx, int *slash)
 {
@@ -49,35 +49,31 @@ int	quote_pos(char *str, char delim, int times)
 	return (quote_idx);
 }
 
-int quotes_left(t_list *tokens, char *line_left)
+void	add_space(t_list **tokens)
 {
-	char    *space;
-	char    *temp;
-	
+	char	*to_add;
+
+	if (*tokens == NULL)
+		return ;
+	to_add = ft_strdup(" ");
+	if (!to_add)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	ft_lstadd_back(tokens, ft_lstnew(to_add));
+}
+
+int quotes_left(char *line_left)
+{
 	if (!line_left || !*line_left)
 		return (0);
 	if (ft_strchr(line_left, '\'') || ft_strchr(line_left, '"'))
 		return (1);
-	if (line_left && *line_left == ' ')
-	{
-		space = ft_strdup(" ");
-		temp = ft_strdup(line_left);
-		if (!space || !temp)
-			return (perror("malloc"), 0);
-		ft_lstadd_back(&tokens, ft_lstnew(space));
-		ft_lstadd_back(&tokens, ft_lstnew(temp));
-	}
-	else
-	{
-		temp = ft_strdup(line_left);
-		if (!temp)
-			return (perror("malloc"), 0);
-		ft_lstadd_back(&tokens, ft_lstnew(temp));
-	}
 	return (0);
 }
 
-int first_occurrence(t_subproc *process, char *line, char delim)
+int first_occurrence(t_process *process, char *line, char delim)
 {
 	char	*chunk;
 	int 	idx;
@@ -89,9 +85,9 @@ int first_occurrence(t_subproc *process, char *line, char delim)
 	{
 		chunk = ft_substr(line, 0, idx);
 		if (!chunk)
-			return(perror("malloc"), 0);
-		chunk = parse_token(process, chunk, 'n');
-		ft_lstadd_back(&process->builtins->tokens, ft_lstnew(chunk));
+			return(perror("malloc"), exit(EXIT_FAILURE), 0);
+		chunk = ft_parse_token(process, chunk, 'n');
+		ft_lstadd_back(&process->tokens, ft_lstnew(chunk));
 	}
 	return (idx);
 }

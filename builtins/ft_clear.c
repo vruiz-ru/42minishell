@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 18:37:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/03 11:42:48 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 18:56:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "builtins.h"
 
 void	ft_clear(void)
 {

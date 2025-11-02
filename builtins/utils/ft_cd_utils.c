@@ -6,24 +6,27 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 09:55:23 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/19 17:44:01 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 18:52:12 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../builtins.h"
 
-void	ft_setpaths(t_subproc *process)
+void	ft_setpaths(t_process *process)
 {
 	char	**last_wd;
 	char	**current_wd;
 
-	last_wd = &process->last_wd;
-	current_wd = &process->current_wd;
+	last_wd = &process->prompt->last_wd;
+	current_wd = &process->prompt->current_wd;
 	if (*last_wd)
 		free(*last_wd);
 	*last_wd = ft_strdup(*current_wd);
 	if (!*last_wd)
-		return ;
+    {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
 	free(*current_wd);
 	*current_wd = ft_getcwd();
 }
@@ -46,12 +49,12 @@ int	invalid_options(char *token)
 	return (0);
 } 
 
-int path_input(t_subproc *process)
+int path_input(t_process *process)
 {
 	t_list	*ptr;
 	char	*path;
 
-    ptr = process->builtins->tokens->next;
+    ptr = process->tokens->next;
 	path = (char *)ptr->content;
 	if (ft_isalnum(path[0]))
 	{
@@ -63,7 +66,7 @@ int path_input(t_subproc *process)
 			return (1);
 		}
 		ft_setpaths(process);
-		if (!process->last_wd || !process->current_wd)
+		if (!process->prompt->last_wd || !process->prompt->current_wd)
 			return (ft_putstr_fd("Malloc failed\n", 1), 0);
         return (1);
 	}

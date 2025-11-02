@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:32:53 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/08 10:38:24 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/28 23:48:38 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_strjoin_free(char const *s1, char const *s2)
 	char	*join;
 
 	if (!s2)
-		return (NULL);
+		return ((char *)s1);
 	if (!s1)
 	{
 		join = ft_substr(s2, 0, ft_strlen(s2));

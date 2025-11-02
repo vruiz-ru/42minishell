@@ -6,11 +6,12 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 19:08:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 20:20:00 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 21:23:33 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "maps.h"
+#include <stdio.h>
 
 int	ft_mapitem_replace(char ***map, char *item, size_t idx)
 {

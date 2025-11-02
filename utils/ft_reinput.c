@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:43:35 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/04 14:38:58 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:03:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../headers/minishell.h"
 
 /* "<" 
 Reads input for a command from a file instead of stdin.
@@ -31,7 +31,7 @@ Edge Cases:
 
 */
 
-int	ft_reinput(t_subproc *process)
+int	ft_reinput(t_process *process)
 {
 	(void)process;
 	return (0);

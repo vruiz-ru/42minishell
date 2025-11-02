@@ -6,12 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 20:06:37 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/04 22:51:03 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 18:56:52 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-
+#include "builtins.h"
 /*
 
 On success, zero is returned.  On error, -1 is returned, and  errno  is
@@ -51,24 +50,24 @@ On success, zero is returned.  On error, -1 is returned, and  errno  is
 
 */
 
-static int  ft_home(t_subproc *process)
+static int  ft_home(t_process *process)
 {
 	char    *home_path;
 
-	home_path = process->ptr_main->home_path;
+	home_path = process->prompt->home_path;
 	if (chdir(home_path) != 0)
 		ft_putstr_fd("cd: Failed returning to home path!", 1);
 	ft_setpaths(process);
 	return (1);
 }
 
-int ft_cd(t_subproc *process)
+int ft_cd(t_process *process)
 {
 	t_list	*ptr;
 	char	*feature;
 	int		size;
 
-    ptr = process->builtins->tokens->next;
+    ptr = process->tokens->next;
 	if (ptr == NULL)
 		return(ft_home(process));
 	feature = (char *)ptr->content;

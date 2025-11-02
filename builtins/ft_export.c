@@ -6,26 +6,26 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 19:51:21 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 11:23:22 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:27:24 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "builtins.h"
 
-static int	check_transfer(t_subproc *process, char *var)
+static int	check_transfer(t_process *process, char *var)
 {
 	char	*get_var;
 	int		idx;
 
-	idx = ft_mapitem_index(process->buffer_env, var);
+	idx = ft_mapitem_index(process->envs->static_env, var);
 	if (idx < 0)
 		return (0);
-	get_var = ft_strdup(process->buffer_env[idx]);
+	get_var = ft_strdup(process->envs->static_env[idx]);
 	if (!get_var)
-		return (0);
-	if (!ft_mapitem_del(&process->buffer_env, idx))
+		return (perror("malloc"), exit(EXIT_FAILURE), 0);
+	if (!ft_mapitem_del(&process->envs->static_env, idx))
 		return (free(get_var), 0);
-	if (!ft_mapitem_add(&process->local_env, get_var))
+	if (!ft_mapitem_add(&process->envs->parent_env, get_var))
 		return (free(get_var), 0);
 	return (1);
 }
@@ -42,19 +42,27 @@ static int	check_update(char **map, char *var)
 	return (1);
 }
 
-int ft_export(t_subproc *process)
+int ft_export(t_process *process)
 {
+	char	**local;
 	char	*line;
-	bool	done;
+	int		idx;
 
-	ft_clear_strtok();
-	line = ft_construct_line(process->builtins->tokens);
-	done = false;
-	if (check_update(process->local_env, line))
-		done = true;
-	if (done == false && check_transfer(process, line))
-		done = true;
-	if (done == false && !ft_mapitem_add(&process->local_env, line))
+	local = process->envs->static_env;
+	line = ft_construct(process->tokens, NULL);
+	if (!ft_strchr(line, '='))
+	{
+		idx = ft_mapitem_index(local, line);
+		if (idx < 0)
+			return (1);
+		if (!ft_mapitem_add(&process->envs->parent_env, local[idx]))
+			return (perror("malloc"), exit(EXIT_FAILURE), 0);
+	}
+	if (check_update(process->envs->parent_env, line))
+		return (1);
+	if (!check_update(process->envs->static_env, line))
+		return (0);
+	if (!check_transfer(process, line))
 		return (0);
 	return (free(line), 1);
 }

@@ -1,50 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nonquotes.c                                     :+:      :+:    :+:   */
+/*   ft_std.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 08:02:20 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/19 17:54:39 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 21:00:50 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../input.h"
 
-static void	add_space(t_list **tokens, char *token)
+static char	*get_content(t_process *process, char *line)
 {
-	char	*to_add;
+	char	*content;
 
-	if (token == NULL)
-		return ;
-	to_add = ft_strdup(" ");
-	if (!to_add)
+	content = NULL;
+	if (process->is_variable)
+	{
+		ft_clear_strtok();
+		content = ft_strtok(line, "=");
+	}
+	else
+		content = ft_strtok(NULL, " ");
+	if (!content)
 	{
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
-	ft_lstadd_back(tokens, ft_lstnew(to_add));
+	return (content);
 }
 
-int		ft_nonquotes(t_subproc *process, char *line)
+int		ft_std(t_process *process, char *line)
 {
 	char    *token;
 	char	*node;
 
 	if (ft_strchr(line, '"') || ft_strchr(line, '\''))
 		return (0);
-	token = ft_strtok(NULL, " ");
-	if (!token)
-		return (perror("malloc"), 0);
+	token = get_content(process, line);
 	while (token)
 	{
-		node = parse_token(process, token, 'n');
+		node = ft_parse_token(process, token, 'n');
 		if (!node)
-			return (perror("malloc"), 0);
-		ft_lstadd_back(&process->builtins->tokens, ft_lstnew(node));
+			return (perror("malloc"), exit(EXIT_FAILURE), 0);
+        ft_lstadd_back(&process->tokens, ft_lstnew(node));
 		token = ft_strtok(NULL, " ");
-		add_space(&process->builtins->tokens, token);
+		if (token)
+			add_space(&process->tokens);
 	}
 	return (1);
 }

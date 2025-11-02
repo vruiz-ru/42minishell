@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_construct_line.c                                :+:      :+:    :+:   */
+/*   ft_getcwd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/10 10:54:14 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 13:06:49 by aghergut         ###   ########.fr       */
+/*   Created: 2025/08/06 08:24:29 by aghergut          #+#    #+#             */
+/*   Updated: 2025/11/02 18:52:55 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../builtins.h"
 
-char	*ft_construct_line(t_list *tokens)
+char	*ft_getcwd(void)
 {
-	t_list	*args;
-	char	*content;
-	char	*line;
-	int		i;
+	char	cwd[4096];
+	char	*res;
 
-	line = NULL;
-	args = tokens->next;
-	if (!args)
-		return (NULL);
-	while (args)
-	{
-		content = (char *)args->content;
-		i = -1;
-		while (content[++i])
-			line = ft_addchar(line, content[i]);
-		args = args->next;
-	}
-	return (line);
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		return (perror("getcwd"), exit(EXIT_FAILURE), NULL);
+	res = ft_strdup(cwd);
+	if (!res)
+		return (perror("malloc"), exit(EXIT_FAILURE), NULL);
+	return (res);
 }

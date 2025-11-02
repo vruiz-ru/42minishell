@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:41:27 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/04 22:30:56 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:03:39 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../headers/minishell.h"
 
 /* "<<" 
 
@@ -34,13 +34,13 @@ Edge Cases:
 
 */
 
-static int	is_heredoc(t_subproc *process)
+static int	is_heredoc(t_process *process)
 {
 	(void)process;
 	return (0);
 }
 
-void	ft_heredoc(t_subproc *process)
+void	ft_heredoc(t_process *process)
 {
 	(void)process;
 	is_heredoc(process);

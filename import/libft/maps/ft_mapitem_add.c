@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 10:49:39 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 20:21:28 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:27:53 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static char	**create_new(char **map, char *add_last)
 	new_map[i] = ft_strdup(add_last);
 	if (new_map[i] == NULL)
 		return (free_partial(new_map, i), NULL);
-	new_map[++i] = NULL;
+	new_map[i + 1] = NULL;
 	return (new_map);
 }
 
@@ -47,18 +47,22 @@ int	ft_mapitem_add(char ***map_ref, char *item)
 {
 	char	**map;
 	char	**new;
+	char	*to_add;
 
 	if (!map_ref)
 		return (0);
 	map = *map_ref;
+	to_add = ft_strdup(item);
+	if (!to_add)
+		return (0);
 	if (map == NULL)
 	{
-		*map_ref = ft_mapnew(item);
+		*map_ref = ft_mapnew(to_add);
 		if (*map_ref == NULL)
 			return (0);
 		return (1);
 	}
-	new = create_new(map, item);
+	new = create_new(map, to_add);
 	if (new != NULL)
 	{
 		ft_mapfree(map);

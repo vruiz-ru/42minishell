@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:38:52 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/04 22:30:38 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:03:18 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../headers/minishell.h"
 
 /* ">>" 
 Appends stdout to a file, instead of overwriting.
@@ -56,13 +56,13 @@ V.	Symlink caveat: If the file is a symlink, appending goes to the target file.
 
 */
 
-static int is_append(t_subproc *process)
+static int is_append(t_process *process)
 {
 	(void)process;
 	return (0);
 }
 
-void	ft_appendre(t_subproc *process)
+void	ft_appendre(t_process *process)
 {
 	(void)process;
 	is_append(process);

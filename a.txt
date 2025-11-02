@@ -12,7 +12,7 @@ before cleanline
 Hello\ World\ $USER\ `\ "\'\ \\ \*\ \?\ \[\]\ \#\ \&\ \;\ \|\ \<\ >\ \(\)\ \~
 Hello\ World\ $USER\ `\ "\'\ \\ \*\ \?\ \[\]\ \#\ \&\ \;\ \|\ \<\ >\ \(\)\ \~
                $`"\
-t_list *ptr = process->builtins->tokens;
+t_list *ptr = process->tokens;
     while (ptr)
     {
         ft_printf("content --> %s\n", (char *)ptr->content);
@@ -310,3 +310,4 @@ If you want, I can:
     or produce a tokenization pipeline (lexer → expander → tokens) that plugs into your existing ft_quotes / reconstruct_token flow.
 
 Which of those do you want next?
+

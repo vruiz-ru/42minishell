@@ -1,57 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_create_tokens.c                                 :+:      :+:    :+:   */
+/*   ft_parse_token.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/06 22:07:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/20 20:06:34 by aghergut         ###   ########.fr       */
+/*   Created: 2025/11/02 17:51:17 by aghergut          #+#    #+#             */
+/*   Updated: 2025/11/02 21:43:48 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../input.h"
 
-char	*parse_token(t_subproc *process, char *content, char token)
+static int	parse_aux(t_process *process, char **res, char **var_name)
+{
+	if (process->is_special == false)
+	{
+		insert_value(process, res, *var_name);
+		free(*var_name);
+		*var_name = NULL;
+	}
+	else
+	{
+		*res = ft_strjoin_free(*res, *var_name);
+		*var_name = NULL;
+	}
+	if (!*res)
+		return (0);
+	return (1);
+}
+
+char	*ft_parse_token(t_process *process, char *content, char token)
 {
 	char	*res;
 	char	*var_name;
 	int		i;
 
-	i = -1;
 	if (!content || !*content)
 		return (NULL);
 	content = clean_line(content, token);
 	res = NULL;
-	while (content[++i] != '\0')
+	i = 0;
+	while (content[i] != '\0')
 	{
 		var_name = NULL;
 		scan_char(process, content, &var_name, &i);
-		if (var_name && process->special_var == false)
+		if (var_name == NULL)
 		{
-			insert_value(process, &res, var_name);
-			if (!res)
-				return (NULL);
-		}
-		if (process->special_var == true)
-			res = ft_strjoin_free(res, var_name);
-		else
 			res = ft_addchar(res, content[i]);
+			i++;
+		}
+		else if (!parse_aux(process, &res, &var_name))
+            return (perror("malloc"), exit(EXIT_FAILURE), NULL);
+			
 	}
 	return (free(content), res);	
-}
-
-int	ft_create_tokens(t_subproc *process)
-{
-	char	*cmd;
-	char    *ptr_line;
-
-	ptr_line = process->line;
-	cmd = ft_strtok(ptr_line, " ");
-	ft_lstadd_back(&process->builtins->tokens, ft_lstnew(cmd));
-	if (!ft_strchr(ptr_line, ' '))
-		return (1);
-	if (!ft_nonquotes(process, ptr_line) && !ft_quotes(process, ptr_line))
-		return (0);
-	return (1);
 }

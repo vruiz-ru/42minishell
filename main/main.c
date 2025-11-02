@@ -6,58 +6,62 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:50:39 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/20 19:37:26 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:29:51 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../headers/minishell.h"
 
-static void	add_last_arg(t_subproc *process)
+static void	add_last_arg(t_process *process)
 {
 	t_list	*last_node;
 	
 	last_node = NULL;
-	if (process->builtins->tokens)
-		last_node = ft_lstlast(process->builtins->tokens);
+	if (process->tokens)
+		last_node = ft_lstlast(process->tokens);
 	if (process->last_arg && *(process->last_arg))
 		free(process->last_arg);
 	if (last_node)
+	{
 		process->last_arg = ft_strdup((char *)last_node->content);
+		if (!process->last_arg)
+		{
+			perror("malloc");
+			exit(EXIT_FAILURE);
+		}
+	}
+		
 }
 
-void	reset_utils(t_subproc **process)
+void	reset_utils(t_process **process)
 {
 	if ((*process)->line)
 		free((*process)->line);
 	add_last_arg(*process);
-	if ((*process)->builtins->tokens)
-		ft_lstclear(&(*process)->builtins->tokens, free);
-	(*process)->builtins->tokens = NULL;
-	(*process)->builtins->double_quotes = false;
-	(*process)->builtins->single_quotes = false;
-	(*process)->builtins->flags = false;
-	(*process)->builtins->in_file = false;
-	(*process)->builtins->out_file = false;
-	if ((*process)->prompt)
-		free((*process)->prompt);
-	(*process)->prompt = NULL;
+	ft_clear_strtok();
+	if ((*process)->tokens)
+		ft_lstclear(&(*process)->tokens, free);
+	(*process)->tokens = NULL;
+	if ((*process)->prompt->display)
+		free((*process)->prompt->display);
+	(*process)->prompt->display = NULL;
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	t_main		*shell;
-	t_subproc  	*process;
+	t_process  	*process;
 
 	if (argc > 2)
 		return (0);
-	if (!init_main(&shell, argv[0], envp) || !init_subproc(shell, &process))
-		return (free_main(shell), 0);
+	process = NULL;
+	if (!init_parent(&process, argv[0], envp))
+		return (0);
 	while (1)
 	{
-		signal(SIGINT, handle_sigint);
+		signal(SIGINT, ft_sigint);
 		ft_readinput(process);
-		ft_builtins(process);
-		shell->status = 0;
+		if (process->tokens && !ft_builtins(process))
+			ft_printf("%s: command not found\n", (char *)process->tokens->content);
 		reset_utils(&process);
 	}
 	return (0);

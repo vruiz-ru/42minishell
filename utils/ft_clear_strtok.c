@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 10:49:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/10/10 10:51:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:03:31 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../headers/minishell.h"
 
 void	ft_clear_strtok(void)
 {

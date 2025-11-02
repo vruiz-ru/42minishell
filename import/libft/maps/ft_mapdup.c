@@ -6,11 +6,12 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 18:41:48 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 17:19:25 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/10/28 19:15:04 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "maps.h"
+#include <stdio.h>
 
 char	**ft_mapdup(char **map)
 {

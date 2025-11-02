@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_getcwd.c                                        :+:      :+:    :+:   */
+/*   ft_readinput.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/06 08:24:29 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/06 08:29:27 by aghergut         ###   ########.fr       */
+/*   Created: 2025/07/31 18:35:16 by aghergut          #+#    #+#             */
+/*   Updated: 2025/11/02 19:47:57 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "input.h"
 
-char	*ft_getcwd(void)
+void	ft_readinput(t_process *process)
 {
-	char	cwd[4096];
-	char	*res;
-
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	process->prompt->display = ft_prompt(process);
+	if (process->prompt->display == NULL)
 	{
-		perror("getcwd");
-		return (NULL);
-	}
-	res = ft_strdup(cwd);
-	if (!res)
-		return (NULL);
-	return (res);
+        perror("malloc");
+        return ;
+    }	
+	process->line = readline(process->prompt->display);
+	if (process->line == NULL || *(process->line) == '\0')
+		return ;
+	add_history(process->line);
+	ft_parse_line(process);
 }

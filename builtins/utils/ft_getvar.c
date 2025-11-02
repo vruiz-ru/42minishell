@@ -6,35 +6,35 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:15:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/08/02 11:30:32 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/02 18:52:35 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../builtins.h"
 
 char	*ft_getvar(char **envp, char *var_name)
 {
-	char	**split;
 	char	*value;
+	int		name_length;
 	int		i;
 
 	i = 0;
-	split = NULL;
 	value = NULL;
 	while (envp[i])
 	{
-		split = ft_split(envp[i], '=');
-		if (!ft_strncmp(split[0], var_name, ft_strlen(var_name)))
+		name_length = ft_strchr(envp[i], '=') - envp[i];
+		if (!ft_strncmp(envp[i], var_name, name_length))
 		{
-            if (split[1])
-			    value = ft_strdup(split[1]);
+			if (envp[i][name_length + 2])
+			{
+				value = ft_strdup(envp[i] + name_length + 2);
+				if (!value)
+					return (perror("malloc"), exit(EXIT_FAILURE), NULL);
+			}
 			else
-                break ;
-            ft_mapfree(split);
+				break ;
 			return (value);
 		}
-		ft_mapfree(split);
-		split = NULL;
 		i++;
 	}
 	return (NULL);
