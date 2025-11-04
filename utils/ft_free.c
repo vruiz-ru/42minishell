@@ -6,18 +6,35 @@
 /*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:20:33 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/02 19:02:03 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/11/04 13:19:14 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
+void	free_env_items(char ***map)
+{
+	char	**ptr;
+	int		i;
+
+	ptr = *map;
+	i = 0;
+	while (ptr[i])
+	{
+		free(ptr[i]);
+		i++;
+	}
+	free(ptr);
+	ptr = NULL;
+	*map = ptr;
+}
+
 void	free_process(t_process *proc)
 {
 	if (proc->envs && proc->envs->parent_env)
-		free(proc->envs->parent_env);
+		free_env_items(&proc->envs->parent_env);
 	if (proc->envs && proc->envs->static_env)
-		free(proc->envs->static_env);
+		free_env_items(&proc->envs->static_env);
 	if (proc->envs)
 		free(proc->envs);
 	if (proc->prompt && proc->prompt->shell_name)
@@ -38,5 +55,8 @@ void	free_process(t_process *proc)
 		ft_lstclear(&proc->tokens, free);
 	if (proc->last_arg)
 		free(proc->last_arg);
+	if (proc)
+		free(proc);
+	proc = NULL;
 }
 

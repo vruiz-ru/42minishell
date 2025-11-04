@@ -106,44 +106,41 @@ OBJS =  $(SRCS1:$(BUILTINS_DIR)$(UTILS_DIR)%.c=$(OBJS_BUILTINS_UTILS)%.o) \
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(MAKE_LIBFT)
-	$(CC) $(OBJS) $(LIBRARIES) $(INCLUDES) $(ASAN_FLAGS) -o $(NAME)
-	echo "$(GREEN)Compiled successfully: $(NAME)$(RESET)"
-
-# ------------------- Object Compilation Rules ----------------------
+	@$(MAKE_LIBFT)
+	@$(CC) $(OBJS) $(LIBRARIES) $(INCLUDES) $(ASAN_FLAGS) -o $(NAME)
+	@echo "$(GREEN)Compiled successfully: $(NAME)$(RESET)"
 
 $(OBJS_BUILTINS_UTILS)%.o: $(BUILTINS_DIR)$(UTILS_DIR)%.c
-	mkdir -p $(OBJS_BUILTINS_UTILS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@mkdir -p $(OBJS_BUILTINS_UTILS)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
 
 $(OBJS_BUILTINS)%.o: $(BUILTINS_DIR)%.c
-	mkdir -p $(OBJS_BUILTINS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@mkdir -p $(OBJS_BUILTINS)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
 
 $(OBJS_HANDLERS)%.o: $(HANDLERS_DIR)%.c
-	mkdir -p $(OBJS_HANDLERS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@mkdir -p $(OBJS_HANDLERS)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
 
 $(OBJS_PARSE_TOKENS_UTILS)%.o: $(PARSE_TOKENS_DIR)$(UTILS_DIR)%.c
-	mkdir -p $(OBJS_PARSE_TOKENS_UTILS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@mkdir -p $(OBJS_PARSE_TOKENS_UTILS)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
 
 $(OBJS_PARSE_TOKENS)%.o: $(PARSE_TOKENS_DIR)%.c
-	mkdir -p $(OBJS_PARSE_TOKENS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@mkdir -p $(OBJS_PARSE_TOKENS)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
 
 $(OBJS_INPUT)%.o: $(INPUT_DIR)%.c
-	mkdir -p $(OBJS_INPUT)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@mkdir -p $(OBJS_INPUT)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
 
 $(OBJS_UTILS)%.o: $(UTILS_DIR)%.c
-	mkdir -p $(OBJS_UTILS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@mkdir -p $(OBJS_UTILS)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
 
 $(OBJS_MAIN)%.o: $(MAIN_DIR)%.c
-	mkdir -p $(OBJS_MAIN)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-# --------------------------------------------------------------------------
+	@mkdir -p $(OBJS_MAIN)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
 
 clean:
 	@rm -Rf $(OBJS_BUILTINS_UTILS) $(OBJS_BUILTINS) $(OBJS_HANDLERS)

@@ -1236,3 +1236,13 @@
    fun:ft_readinput
    fun:main
 }
+
+{
+   <readline_leaks>
+   **memcheck:Reachable**
+   fun:realloc
+   fun:xrealloc
+   fun:rl_expand_prompt
+   fun:rl_set_prompt
+   fun:readline
+}
