@@ -79,17 +79,20 @@ SRCS3 = $(HANDLERS_DIR)ft_sigint.c
 SRCS4 = $(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_inputvar_utils.c \
         $(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_parse_utils.c \
         $(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_quote_utils.c \
-		$(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_specialvars.c
+		$(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_specialvars.c \
+		$(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_cmds_utils.c
 
 SRCS5 = $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_inputvar.c \
         $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_parse_line.c \
         $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_parse_token.c \
         $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_quote.c \
-        $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_std.c
+        $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_std.c\
+		$(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_cmds.c
 
 SRCS6 = $(INPUT_DIR)ft_prompt.c $(INPUT_DIR)ft_readinput.c 
 
-SRCS7 = $(PROCESS_DIR)ft_fork_process.c
+SRCS7 = $(PROCESS_DIR)ft_fork_process.c \
+		$(PROCESS_DIR)ft_exec_utils.c
 
 SRCS8 = $(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_init.c \
         $(UTILS_DIR)ft_clear_strtok.c $(UTILS_DIR)ft_construct.c \

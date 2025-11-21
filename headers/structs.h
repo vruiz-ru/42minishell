@@ -31,17 +31,29 @@ typedef struct	Prompt_utils
 	char	*last_wd;
 }	t_prompt;
 
+// mini/headers/structs.h
+
+typedef struct s_cmd
+{
+    char            **args;       // El comando y sus flags listos para execve. Ej: {"ls", "-la", NULL}
+    char            *path;        // La ruta absoluta del binario. Ej: "/bin/ls"
+    int             fd_in;        // De dónde lee (0 por defecto, o un archivo '<', o un pipe)
+    int             fd_out;       // Dónde escribe (1 por defecto, o un archivo '>', o un pipe)
+    struct s_cmd    *next;        // Puntero al siguiente comando (si hay un pipe '|')
+} t_cmd;
+
 typedef struct Process_utils
 {
-	t_prompt	*prompt;
-	t_envs		*envs;
-	t_list		*tokens;
-	pid_t		pid;
-	char		*line;
-	int			status;
+    t_prompt    *prompt;
+    t_envs      *envs;
+    t_list      *tokens;    // Tu lista original (Lexer)
+    t_cmd       *commands;  // <--- ¡NUEVO! Tu lista estructurada (Parser)
+    pid_t       pid;
+    char        *line;
+    int         status;
     int         forks;
-	bool		is_special;
-	bool        is_variable;
+    bool        is_special;
+    bool        is_variable;
 }   t_process;
 
 #endif

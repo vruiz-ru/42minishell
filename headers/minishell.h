@@ -27,7 +27,8 @@
 // HANDLERS
 void		ft_sigint(int sig);
 // PROCESSES
-int			ft_fork_process(t_process *process, int(*built_f)(t_process *));
+//int			ft_fork_process(t_process *process, int(*built_f)(t_process *));
+int			ft_fork_process(t_process *process);
 // UTILS
 void	    ft_clear_strtok(void);
 int			init_parent(t_process **parent, char *name, char *envp[]);
@@ -36,4 +37,11 @@ char	    *ft_construct(t_list *tokens, char *str);
 void	    free_process(t_process *proc);
 void		ft_addspace(t_list **tokens);
 void		ft_safeadd_tokens(t_list **tokens, char **token);
+// En mini/headers/minishell.h
+t_cmd   *ft_new_cmd(void);
+int     is_redir(char *str);
+void    open_file(t_cmd *cmd, char *symbol, char *file);
+int			ft_tokens_to_cmds(t_process *process);
+char *ft_get_cmd_path(char *cmd, char **envp);
+void ft_free_array(char **arr);
 #endif

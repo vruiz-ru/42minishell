@@ -12,6 +12,32 @@
 
 #include "../headers/minishell.h"
 
+/* En mini/main/main.c */
+void print_commands_debug(t_process *p)
+{
+    t_cmd *c = p->commands;
+    int cmd_n = 1;
+    int i;
+
+    if (!c) { printf("⚠️  No hay comandos\n"); return; }
+
+    while (c)
+    {
+        printf("\n📦 BOLSA (COMANDO) #%d:\n", cmd_n++);
+        
+        // <--- AÑADE ESTA LÍNEA ---
+        printf("   📂 FDs:  In[%d]  Out[%d]\n", c->fd_in, c->fd_out);
+        // -------------------------
+
+        i = 0;
+        if (c->args)
+            while (c->args[i]) { printf("   Arg[%d]: %s\n", i, c->args[i]); i++; }
+        
+        c = c->next;
+    }
+    printf("\n");
+}
+
 void	reset_utils(t_process **process)
 {
 	if ((*process)->line)
@@ -37,9 +63,28 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		signal(SIGINT, ft_sigint);
-		ft_readinput(process);
+		// 1. Leer y crear tokens (esto ya lo tenías)
+        ft_readinput(process); 
+
+        // 2. Comprobar si hay algo escrito antes de seguir
+        if (process->tokens) 
+        {
+            // --- ZONA DE PRUEBAS (NUEVO) ---
+            
+            // A. Convertimos la lista plana en "bolsas" t_cmd
+            ft_tokens_to_cmds(process); 
+
+            // B. Imprimimos para ver si ha funcionado
+            print_commands_debug(process);
+            
+            // -------------------------------
+        }
+
 		ft_exit(process);
-		ft_fork_process(process, ft_builtins);
+        
+        // 3. COMENTA ESTA LÍNEA DE MOMENTO PARA QUE NO FALLE AL EJECUTAR
+		//ft_fork_process(process, ft_builtins);
+		ft_fork_process(process);
 		reset_utils(&process);
 	}
 	return (0);
