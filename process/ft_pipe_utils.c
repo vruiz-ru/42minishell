@@ -11,67 +11,51 @@
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-#include <errno.h>
 
-static void	ft_execute_external(t_process *process, t_cmd *cmd)
+/* 1. Configura la entrada/salida de los pipes */
+/* - Si prev_fd != 0, lee del comando anterior.
+      - Si hay cmd->next, escribe en el pipe actual. */
+void	config_pipes(t_cmd *cmd, int *pipefd, int prev_fd)
 {
-	char	*path;
-
-	path = ft_get_cmd_path(cmd->args[0], process->envs->parent_env);
-	if (!path)
+	if (prev_fd != 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->args[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		exit(127);
+		dup2(prev_fd, STDIN_FILENO);
+		close(prev_fd);
 	}
-	if (execve(path, cmd->args, process->envs->parent_env) == -1)
+	if (cmd->next)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		perror(cmd->args[0]);
-		free(path);
-		if (errno == EACCES)
-			exit(126);
-		exit(1);
+		close(pipefd[0]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
 	}
 }
 
-static void	child_process(t_process *proc, t_cmd *cmd, int *pipefd, int prev)
+/* 2. Aplica redirecciones de archivo (<, >, >>) */
+/* NOTA BASH: Las redirecciones tienen prioridad sobre los pipes.
+      Si un comando tiene '>', escribirá en el archivo, no en el pipe. */
+void	apply_redirections(t_cmd *cmd)
 {
-	proc->pid = fork();
-	if (proc->pid == 0)
+	if (cmd->fd_in != 0)
 	{
-		config_pipes(cmd, pipefd, prev);
-		apply_redirections(cmd);
-		ft_execute_external(proc, cmd);
+		if (cmd->fd_in < 0)
+			exit(1); // El error ya se imprimió en el parser (perror)
+		dup2(cmd->fd_in, STDIN_FILENO);
+		close(cmd->fd_in);
+	}
+	if (cmd->fd_out != 1)
+	{
+		dup2(cmd->fd_out, STDOUT_FILENO);
+		close(cmd->fd_out);
 	}
 }
 
-int	ft_fork_process(t_process *process)
+/* 3. Cierra los FDs en el proceso padre para evitar leaks */
+void	close_fds(t_cmd *cmd, int prev_fd)
 {
-	t_cmd	*cmd;
-	int		pipefd[2];
-	int		prev_fd;
-	int		status;
-
-	cmd = process->commands;
-	prev_fd = 0;
-	while (cmd)
-	{
-		if (cmd->next && pipe(pipefd) == -1)
-			return (perror("pipe"), 0);
-		child_process(process, cmd, pipefd, prev_fd);
-		close_fds(cmd, prev_fd);
-		if (cmd->next)
-		{
-			close(pipefd[1]);
-			prev_fd = pipefd[0];
-		}
-		cmd = cmd->next;
-	}
-	while (waitpid(-1, &status, 0) > 0)
-		;
-	if (WIFEXITED(status))
-		process->status = WEXITSTATUS(status);
-	return (1);
+	if (prev_fd != 0)
+		close(prev_fd);
+	if (cmd->fd_in != 0)
+		close(cmd->fd_in);
+	if (cmd->fd_out != 1)
+		close(cmd->fd_out);
 }

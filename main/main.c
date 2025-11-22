@@ -74,6 +74,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		signal(SIGINT, ft_sigint);
+		signal(SIGQUIT, SIG_IGN); // <---  IGNORAR Ctrl-
 		ft_readinput(process);
 		if (process->tokens)
 		{

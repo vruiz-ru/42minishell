@@ -11,56 +11,101 @@
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+#include "../builtins/builtins.h"
+#include <errno.h>
 
-/* mini/process/ft_pipe_utils.c */
-#include "../headers/minishell.h"
-
-/* 1. Configura la entrada/salida de los pipes */
-/* - Si prev_fd != 0, lee del comando anterior.
-      - Si hay cmd->next, escribe en el pipe actual. */
-void	config_pipes(t_cmd *cmd, int *pipefd, int prev_fd)
+/* 1. Ejecuta comando externo */
+static void	ft_execute_external(t_process *process, t_cmd *cmd)
 {
-	if (prev_fd != 0)
+	char	*path;
+
+	path = ft_get_cmd_path(cmd->args[0], process->envs->parent_env);
+	if (!path)
 	{
-		dup2(prev_fd, STDIN_FILENO);
-		close(prev_fd);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->args[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		exit(127);
 	}
-	if (cmd->next)
+	if (execve(path, cmd->args, process->envs->parent_env) == -1)
 	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
+		ft_putstr_fd("minishell: ", 2);
+		perror(cmd->args[0]);
+		free(path);
+		if (errno == EACCES)
+			exit(126);
+		exit(1);
+	}
+}
+/* 2. Lógica del proceso hijo */
+static void child_process(t_process *proc, t_cmd *cmd, int *pipefd, int prev)
+{
+    proc->pid = fork();
+    if (proc->pid == 0)
+    {
+        // 1. RESTAURAR SEÑALES ORIGINALES
+        // Queremos que 'cat' muera con Ctrl+C (SIG_DFL = Default)
+        signal(SIGINT, SIG_DFL); 
+        // Queremos que 'cat' pueda generar core dump con Ctrl+\ (SIG_DFL)
+        signal(SIGQUIT, SIG_DFL);
+
+        config_pipes(cmd, pipefd, prev);
+        apply_redirections(cmd);
+        if (ft_builtins(proc, cmd))
+            exit(0);
+        ft_execute_external(proc, cmd);
+    }
+}
+/* 3. Espera a los hijos y gestiona señales (Nueva función extraída) */
+static void	wait_children(t_process *process)
+{
+	int	status;
+
+	while (waitpid(-1, &status, 0) > 0)
+		;
+	if (WIFEXITED(status))
+		process->status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+		{
+			write(1, "\n", 1);
+			process->status = 130;
+		}
+		else if (WTERMSIG(status) == SIGQUIT)
+		{
+			ft_putstr_fd("Quit: 3\n", 1);
+			process->status = 131;
+		}
 	}
 }
 
-/* 2. Aplica redirecciones de archivo (<, >, >>) */
-/* NOTA BASH: Las redirecciones tienen prioridad sobre los pipes.
-      Si un comando tiene '>', escribirá en el archivo, no en el pipe. */
-void	apply_redirections(t_cmd *cmd)
+/* 4. Bucle principal */
+int	ft_fork_process(t_process *process)
 {
-	if (cmd->fd_in != 0)
-	{
-		if (cmd->fd_in < 0)
-			exit(1); // El error ya se imprimió en el parser (perror)
-		dup2(cmd->fd_in, STDIN_FILENO);
-		close(cmd->fd_in);
-	}
-	if (cmd->fd_out != 1)
-	{
-		dup2(cmd->fd_out, STDOUT_FILENO);
-		close(cmd->fd_out);
-	}
-}
+	t_cmd	*cmd;
+	int		pipefd[2];
+	int		prev_fd;
 
-/* 3. Cierra los FDs en el proceso padre para evitar leaks */
-void	close_fds(t_cmd *cmd, int prev_fd)
-{
-	if (prev_fd != 0)
-		close(prev_fd);
-	if (cmd->fd_in != 0)
-		close(cmd->fd_in);
-	if (cmd->fd_out != 1)
-		close(cmd->fd_out);
+	cmd = process->commands;
+	prev_fd = 0;
+	signal(SIGINT, SIG_IGN);
+	while (cmd)
+	{
+		if (cmd->next && pipe(pipefd) == -1)
+			return (perror("pipe"), 0);
+		child_process(process, cmd, pipefd, prev_fd);
+		close_fds(cmd, prev_fd);
+		if (cmd->next)
+		{
+			close(pipefd[1]);
+			prev_fd = pipefd[0];
+		}
+		cmd = cmd->next;
+	}
+	wait_children(process);
+	signal(SIGINT, ft_sigint);
+	return (1);
 }
 
 

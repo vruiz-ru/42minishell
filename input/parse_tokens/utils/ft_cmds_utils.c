@@ -28,17 +28,32 @@ t_cmd	*ft_new_cmd(void)
 	return (cmd);
 }
 
+/* Detecta si es cualquier redirección */
 int	is_redir(char *str)
 {
-	if (!ft_strncmp(str, "<", 2) || !ft_strncmp(str, ">", 2)
-		|| !ft_strncmp(str, ">>", 3))
+	if (!ft_strncmp(str, "<<", 3)) // << (len 2 + null)
+		return (1);
+	if (!ft_strncmp(str, ">>", 3)) // >>
+		return (1);
+	if (!ft_strncmp(str, "<", 2))  // <
+		return (1);
+	if (!ft_strncmp(str, ">", 2))  // >
 		return (1);
 	return (0);
 }
 
+/* Abre el archivo correspondiente o lanza el heredoc */
 void	open_file(t_cmd *cmd, char *symbol, char *file)
 {
-	if (!ft_strncmp(symbol, "<", 2))
+    // CASO HEREDOC (<<)
+	if (!ft_strncmp(symbol, "<<", 3))
+	{
+		if (cmd->fd_in != 0)
+			close(cmd->fd_in);
+		cmd->fd_in = ft_heredoc(file); // 'file' aquí es el delimitador
+	}
+    // CASO INPUT (<)
+	else if (!ft_strncmp(symbol, "<", 2))
 	{
 		if (cmd->fd_in != 0)
 			close(cmd->fd_in);
@@ -46,6 +61,7 @@ void	open_file(t_cmd *cmd, char *symbol, char *file)
 		if (cmd->fd_in < 0)
 			perror(file);
 	}
+    // CASOS OUTPUT (>, >>)
 	else
 	{
 		if (cmd->fd_out != 1)

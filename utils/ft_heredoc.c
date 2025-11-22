@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
+#include <fcntl.h>
 /* "<<" 
 
 Feeds a block of text as stdin to a command.
@@ -34,14 +34,44 @@ Edge Cases:
 
 */
 
-static int	is_heredoc(t_process *process)
+static void	write_to_tmp(int fd, char *line)
 {
-	(void)process;
-	return (0);
+	ft_putstr_fd(line, fd);
+	ft_putstr_fd("\n", fd);
+	free(line);
 }
 
-void	ft_heredoc(t_process *process)
+/* Bucle principal del heredoc */
+int	ft_heredoc(char *delimiter)
 {
-	(void)process;
-	is_heredoc(process);
+	int		fd;
+	char	*line;
+
+	// 1. Abrir archivo temporal oculto para escribir
+	fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
+		return (perror("heredoc open"), -1);
+	
+	while (1)
+	{
+		line = readline("> "); // Prompt secundario
+		if (!line) // Si el usuario pulsa Ctrl+D (EOF)
+			break ;
+		// Si la línea es EXACTAMENTE el delimitador, paramos
+		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1))
+		{
+			free(line);
+			break ;
+		}
+		write_to_tmp(fd, line);
+	}
+	close(fd);
+	
+	// 2. Abrir el mismo archivo para lectura y devolver ese FD
+	fd = open(".heredoc_tmp", O_RDONLY);
+	
+	// 3. Borrar el archivo del sistema (el FD sigue abierto para nosotros)
+	unlink(".heredoc_tmp"); 
+	
+	return (fd);
 }
