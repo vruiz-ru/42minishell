@@ -52,5 +52,5 @@ int	ft_unset(t_process *process, t_cmd *cmd)
 		remove_var(&process->envs->parent_env, cmd->args[i]);
 		i++;
 	}
-	return (1);
+	return (0);
 }

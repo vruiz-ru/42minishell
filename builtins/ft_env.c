@@ -25,5 +25,5 @@ int	ft_env(t_process *process, t_cmd *cmd)
 		ft_printf("%s\n", *ptr);
 		ptr++;
 	}
-	return (1);
+	return (0);
 }

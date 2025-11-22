@@ -24,6 +24,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// VARIABLE GLOBAL 
+extern int g_signal_status;
 // HANDLERS
 void		ft_sigint(int sig);
 // PROCESSES

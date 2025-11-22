@@ -55,7 +55,7 @@ static int  ft_home(t_process *process)
     if (chdir(process->prompt->home_path) != 0)
         ft_putstr_fd("cd: Failed returning to home path\n", 2);
     ft_setpaths(process);
-    return (1);
+    return (0);
 }
 
 int ft_cd(t_process *process, t_cmd *cmd)

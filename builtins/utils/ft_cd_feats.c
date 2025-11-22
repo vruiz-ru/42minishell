@@ -28,7 +28,7 @@ int dash_feature(t_process *process, t_cmd *cmd)
     path = cmd->args[1]; 
     // (Nota: Tu lógica original de tokens->next->next era compleja, 
     // aquí simplificamos: si 'cd' tiene args, path_input lo manejará o es home)
-    return (1);
+    return (0);
 }
 
 int up_feature(t_process *process, t_cmd *cmd)
@@ -64,7 +64,7 @@ int up_feature(t_process *process, t_cmd *cmd)
     }
     free(path_copy);
     ft_setpaths(process);
-    return (1);
+    return (0);
 }
 
 int home_feature(t_process *process, t_cmd *cmd)
@@ -92,7 +92,7 @@ int home_feature(t_process *process, t_cmd *cmd)
     }   
     ft_setpaths(process);
     free(path);
-    return(1);
+    return(0);
 }
 
 int back_feature(t_process *process, t_cmd *cmd)
@@ -130,5 +130,5 @@ int root_feature(t_process *process, t_cmd *cmd)
        return (1);
     }
     ft_setpaths(process);
-    return (1);
+    return (0);
 }

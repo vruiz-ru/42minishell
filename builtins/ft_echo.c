@@ -110,5 +110,5 @@ int ft_echo(t_process *process, t_cmd *cmd)
     if (!n_option)
         write(1, "\n", 1);
         
-    return (1); // Retornamos 1 para decir "ejecutado con éxito"
+    return (0); 
 }

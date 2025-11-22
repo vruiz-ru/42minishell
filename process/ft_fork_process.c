@@ -32,7 +32,7 @@ static void	ft_execute_external(t_process *process, t_cmd *cmd)
 		ft_putstr_fd("minishell: ", 2);
 		perror(cmd->args[0]);
 		free(path);
-		if (errno == EACCES)
+		if (errno == EACCES || errno == EISDIR)
 			exit(126);
 		exit(1);
 	}
@@ -51,8 +51,9 @@ static void child_process(t_process *proc, t_cmd *cmd, int *pipefd, int prev)
 
         config_pipes(cmd, pipefd, prev);
         apply_redirections(cmd);
-        if (ft_builtins(proc, cmd))
-            exit(0);
+        int ret = ft_builtins(proc, cmd);
+		if (ret != -1) // Si era un builtin (retorno != -1)
+    		exit(ret); // Salimos con SU código (0 o 1), no con 0 inventado
         ft_execute_external(proc, cmd);
     }
 }
@@ -77,6 +78,8 @@ static void	wait_children(t_process *process)
 			ft_putstr_fd("Quit: 3\n", 1);
 			process->status = 131;
 		}
+		else
+			process->status = 128 + WTERMSIG(status);
 	}
 }
 

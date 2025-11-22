@@ -18,7 +18,7 @@ int ft_builtins(t_process *process, t_cmd *cmd)
     int  len;
 
     if (!cmd || !cmd->args || !cmd->args[0])
-        return (0);
+        return (-1); // CÓDIGO ESPECIAL: NO ES BUILTIN
     
     program = cmd->args[0];
     len = ft_strlen(program);
@@ -41,5 +41,5 @@ int ft_builtins(t_process *process, t_cmd *cmd)
     if (!ft_strncmp(program, "clear", len) && len == 5)
         return (ft_clear(process, cmd));
         
-    return (0); // No era un builtin
+    return (-1); // CÓDIGO ESPECIAL: NO ES BUILTIN
 }

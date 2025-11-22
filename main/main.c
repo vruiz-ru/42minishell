@@ -12,7 +12,8 @@
 
 #include "../headers/minishell.h"
 
-/* En mini/main/main.c */
+int g_signal_status = 0;
+
 void print_commands_debug(t_process *p)
 {
     t_cmd *c = p->commands;
@@ -73,9 +74,17 @@ int	main(int argc, char *argv[], char *envp[])
 		return (0);
 	while (1)
 	{
+		// 1. Configurar señales para el modo interactivo
 		signal(SIGINT, ft_sigint);
 		signal(SIGQUIT, SIG_IGN); // <---  IGNORAR Ctrl-
+		// 2. Leer input (readline se quedará esperando aquí)
 		ft_readinput(process);
+		// 3. CHECK DE SEÑALES: ¿Nos interrumpieron mientras esperábamos en readline?
+		if (g_signal_status != 0)
+		{
+			process->status = g_signal_status; // Actualizamos $? a 130
+			g_signal_status = 0;               // Reseteamos la global
+		}
 		if (process->tokens)
 		{
 			ft_tokens_to_cmds(process);
@@ -85,8 +94,8 @@ int	main(int argc, char *argv[], char *envp[])
 			if (process->commands && !process->commands->next && \
 				ft_is_parent_builtin(process->commands))
 			{
-				// Ejecutamos directamente en el padre (persistente)
-				ft_builtins(process, process->commands);
+				// Ejecutamos y guardamos el resultado (0 o 1) en el status global
+    			process->status = ft_builtins(process, process->commands);
 			}
 			else
 			{

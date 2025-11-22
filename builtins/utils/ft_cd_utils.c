@@ -12,21 +12,55 @@
 
 #include "../builtins.h"
 
-void ft_setpaths(t_process *process)
+/* Función auxiliar para actualizar el entorno real */
+static void	update_env_str(t_process *proc, char *key, char *value)
 {
-    char    *last_wd;
-    char    *current_wd;
+	char	*full_str;
+	int		idx;
 
-    last_wd = process->prompt->last_wd;
-    current_wd = process->prompt->current_wd;
-    
-    if (process->prompt->last_wd)
-        free(process->prompt->last_wd);
-    process->prompt->last_wd = ft_strdup(current_wd);
-    
-    if (process->prompt->current_wd)
-        free(process->prompt->current_wd);
-    process->prompt->current_wd = ft_getcwd();
+	if (!value)
+		return ;
+	// Construimos la cadena completa (ej: "PWD=/home")
+	full_str = ft_strjoin(key, value);
+	if (!full_str)
+		return ;
+	
+	// Buscamos si la variable ya existe
+	idx = ft_mapitem_index(proc->envs->parent_env, key);
+	
+	// Si existe la reemplazamos, si no la creamos
+	if (idx >= 0)
+		ft_mapitem_replace(&proc->envs->parent_env, full_str, idx);
+	else
+		ft_mapitem_add(&proc->envs->parent_env, full_str);
+	
+	free(full_str);
+}
+
+void	ft_setpaths(t_process *process)
+{
+	// 1. Actualizar la estructura interna (Prompt)
+	if (process->prompt->last_wd)
+		free(process->prompt->last_wd);
+	
+	// Guardamos el path actual antes de cambiarlo (será el OLDPWD)
+	if (process->prompt->current_wd)
+		process->prompt->last_wd = ft_strdup(process->prompt->current_wd);
+	else
+		process->prompt->last_wd = ft_strdup("");
+
+	if (process->prompt->current_wd)
+		free(process->prompt->current_wd);
+	
+	// Obtenemos el nuevo path actual desde el sistema
+	process->prompt->current_wd = ft_getcwd();
+
+	// 2. Sincronizar las variables de entorno REALES (Lo nuevo)
+	// Actualizamos OLDPWD con el valor antiguo que acabamos de guardar
+	update_env_str(process, "OLDPWD=", process->prompt->last_wd);
+	
+	// Actualizamos PWD con el nuevo valor actual
+	update_env_str(process, "PWD=", process->prompt->current_wd);
 }
 
 int invalid_options(char *token)
@@ -70,7 +104,7 @@ int path_input(t_process *process, t_cmd *cmd)
             return (1);
         }
         ft_setpaths(process);
-        return (1);
+        return (0);
     }
     return (0);
 }

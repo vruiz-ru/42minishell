@@ -28,5 +28,5 @@ int ft_pwd(t_process *process, t_cmd *cmd)
 		return (0);
 	ft_printf("%s\n", dir_path);
 	free(haystack);
-	return (1);
+	return (0);
 }

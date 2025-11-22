@@ -50,6 +50,33 @@ t_process	*init_child(t_process *parent)
     child->status = 0;
 	return (child);
 }
+/* Nueva función para incrementar SHLVL */
+static void	increment_shell_level(t_process *proc)
+{
+	char	*lvl_str;
+	char	*entry;
+	int		lvl;
+	int		idx;
+
+	lvl_str = ft_getvar(proc->envs->parent_env, "SHLVL");
+	lvl = 0;
+	if (lvl_str)
+		lvl = ft_atoi(lvl_str);
+	free(lvl_str);
+	lvl_str = ft_itoa(lvl + 1);
+	if (!lvl_str)
+		return ;
+	entry = ft_strjoin("SHLVL=", lvl_str);
+	free(lvl_str);
+	if (!entry)
+		return ;
+	idx = ft_mapitem_index(proc->envs->parent_env, "SHLVL");
+	if (idx >= 0)
+		ft_mapitem_replace(&proc->envs->parent_env, entry, idx);
+	else
+		ft_mapitem_add(&proc->envs->parent_env, entry);
+	free(entry);
+}
 
 int	init_parent(t_process **parent, char *name, char *envp[])
 {
@@ -74,5 +101,7 @@ int	init_parent(t_process **parent, char *name, char *envp[])
     (*parent)->forks = 1;
 	(*parent)->pid  = getpid();
     (*parent)->status = 0;
+	// <--- NUEVO: Incrementar nivel al iniciar
+    increment_shell_level(*parent);
 	return (1);
 }
