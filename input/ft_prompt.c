@@ -49,7 +49,7 @@ char	*ft_prompt(t_process *process)
 	path = get_display_path(process);
 	if (!path)
 		return (perror("malloc"), exit(EXIT_FAILURE), NULL);
-	prompt = ft_strjoin(">/", path);
+	prompt = ft_strjoin(">", path);
 	free(path);
 	if (!prompt)
 		return (perror("malloc"), exit(EXIT_FAILURE), NULL);

@@ -83,25 +83,41 @@ int	init_parent(t_process **parent, char *name, char *envp[])
 	*parent = init();
 	if (!*parent)
 		return (0);
+	
+	// 1. Duplicamos el entorno primero (necesario para buscar HOME después)
 	(*parent)->envs->parent_env = ft_mapdup(envp);
 	if (!(*parent)->envs->parent_env)
 		return (perror("malloc"), exit(EXIT_FAILURE), 0);
+	
 	(*parent)->prompt->shell_name = ft_strdup(name);
 	if (!(*parent)->prompt->shell_name)
 		return (perror("malloc"), exit(EXIT_FAILURE), 0);
-	(*parent)->prompt->home_path = ft_getcwd();
+
+	// 2. CORRECCIÓN: Buscamos HOME en el entorno real
+	(*parent)->prompt->home_path = ft_getvar((*parent)->envs->parent_env, "HOME");
+	
+	// Si no existe HOME (unset HOME), usamos el directorio actual como fallback
+	if (!(*parent)->prompt->home_path)
+		(*parent)->prompt->home_path = ft_getcwd();
+	
 	if (!(*parent)->prompt->home_path)
 		return (perror("malloc"), exit(EXIT_FAILURE), 0);
+
+	// 3. El directorio actual e inicial (PWD/OLDPWD) sí es getcwd()
 	(*parent)->prompt->current_wd = ft_getcwd();
 	if (!(*parent)->prompt->current_wd)
 		return (perror("malloc"), exit(EXIT_FAILURE), 0);
+	
 	(*parent)->prompt->last_wd = ft_getcwd();
 	if (!(*parent)->prompt->last_wd)
 		return (perror("malloc"), exit(EXIT_FAILURE), 0);
-    (*parent)->forks = 1;
-	(*parent)->pid  = getpid();
-    (*parent)->status = 0;
-	// <--- NUEVO: Incrementar nivel al iniciar
-    increment_shell_level(*parent);
+	
+	(*parent)->forks = 1;
+	(*parent)->pid = getpid();
+	(*parent)->status = 0;
+
+	// 4. Incrementamos SHLVL
+	increment_shell_level(*parent);
+
 	return (1);
 }

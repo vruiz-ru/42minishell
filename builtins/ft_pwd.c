@@ -12,6 +12,23 @@
 
 #include "builtins.h"
 
+int	ft_pwd(t_process *process, t_cmd *cmd)
+{
+	char	*cwd;
+
+	(void)process;
+	(void)cmd; // El subject dice "pwd sin opciones", ignoramos args.
+
+	cwd = ft_getcwd();
+	if (!cwd)
+		return (1); // Hubo un error obteniendo la ruta
+	// 2. La imprimimos tal cual, sin filtros ni búsquedas
+	ft_printf("%s\n", cwd);
+	// 3. Liberamos y éxito
+	free(cwd);
+	return (0);
+}
+/*
 int ft_pwd(t_process *process, t_cmd *cmd)
 {
 	char	*dir_path;
@@ -29,4 +46,4 @@ int ft_pwd(t_process *process, t_cmd *cmd)
 	ft_printf("%s\n", dir_path);
 	free(haystack);
 	return (0);
-}
+}*/
