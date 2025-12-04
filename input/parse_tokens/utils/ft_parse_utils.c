@@ -71,7 +71,9 @@ char	*clean_line(char *content, char token)
 	
 	while (content[i] != '\0')
 	{
-		if (content[i] == '\\' && ft_strchr(seq, content[i + 1]))
+		// FIX: Añadimos check de content[i+1] para no escapar el final
+		// Y check de *seq para asegurarnos de que hay algo que escapar
+		if (content[i] == '\\' && content[i + 1] && *seq && ft_strchr(seq, content[i + 1]))
 		{
 			i++;
 			new = ft_addchar(new, content[i]);

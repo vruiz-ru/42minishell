@@ -39,7 +39,7 @@ int	ft_exit(t_process *process, t_cmd *cmd)
 		if (!is_numeric(cmd->args[1]))
 		{
 			ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
-			status = 255;
+			status = 2;
 		}
 		else if (cmd->args[2])
 		{
