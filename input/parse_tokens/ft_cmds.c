@@ -12,23 +12,21 @@
 
 #include "../../headers/minishell.h"
 
-
-static void parse_redir(t_cmd *node, char *redir, char *file)
+static void	parse_redir(t_cmd *node, char *redir, char *file)
 {
-    int heredoc_fd;
+	int	heredoc_fd;
 
-    if (!ft_strncmp(redir, "<<", 3))
-    {
-        // El heredoc es el único que ejecutamos YA para capturar el input
-        heredoc_fd = ft_heredoc(file);
-        ft_add_io(node, IO_HEREDOC, NULL, heredoc_fd);
-    }
-    else if (!ft_strncmp(redir, ">>", 3))
-        ft_add_io(node, IO_APPEND, file, -1);
-    else if (!ft_strncmp(redir, "<", 2))
-        ft_add_io(node, IO_IN, file, -1);
-    else if (!ft_strncmp(redir, ">", 2))
-        ft_add_io(node, IO_OUT, file, -1);
+	if (!ft_strncmp(redir, "<<", 3))
+	{
+		heredoc_fd = ft_heredoc(file);
+		ft_add_io(node, IO_HEREDOC, "heredoc", heredoc_fd);
+	}
+	else if (!ft_strncmp(redir, ">>", 3))
+		ft_add_io(node, IO_APPEND, file, -1);
+	else if (!ft_strncmp(redir, "<", 2))
+		ft_add_io(node, IO_IN, file, -1);
+	else if (!ft_strncmp(redir, ">", 2))
+		ft_add_io(node, IO_OUT, file, -1);
 }
 
 static int	count_args(t_list *tokens)
@@ -54,7 +52,6 @@ static int	count_args(t_list *tokens)
 	return (i);
 }
 
-// Versión final de fill_cmd: Solo parsea argumentos y registra redirecciones
 static void	fill_cmd(t_cmd *node, t_list **tokens)
 {
 	int		i;
@@ -66,57 +63,54 @@ static void	fill_cmd(t_cmd *node, t_list **tokens)
 		str = (char *)(*tokens)->content;
 		if (is_redir(str))
 		{
-			*tokens = (*tokens)->next; // Saltamos el símbolo (<, >>...)
-            
-			// Saltamos espacios hasta encontrar el archivo
+			*tokens = (*tokens)->next;
 			while (*tokens && !ft_strncmp((*tokens)->content, " ", 2))
 				*tokens = (*tokens)->next;
-            
 			if (*tokens)
-                // Registramos la redirección para que la abra el HIJO más tarde
 				parse_redir(node, str, (char *)(*tokens)->content);
 		}
-		else if (ft_strncmp(str, " ", 2) != 0) // Si no es espacio ni redirección
-		{
-            // Añadimos el argumento tal cual (sin concatenación especial)
+		else if (ft_strncmp(str, " ", 2) != 0)
 			node->args[i++] = ft_strdup(str);
-		}
-		
 		if (*tokens)
 			*tokens = (*tokens)->next;
 	}
 	node->args[i] = NULL;
 }
+static t_cmd	*create_one_cmd(t_list **tokens)
+{
+	t_cmd	*new;
+
+	new = ft_new_cmd();
+	if (!new)
+		return (NULL);
+	new->args = malloc(sizeof(char *) * (count_args(*tokens) + 1));
+	if (!new->args)
+	{
+		free(new);
+		return (NULL);
+	}
+	fill_cmd(new, tokens);
+	return (new);
+}
 
 int	ft_tokens_to_cmds(t_process *process)
 {
-	t_list	*curr;
-	t_cmd	*head;
-	t_cmd	*last;
-	t_cmd	*new;
+	t_list *curr;
+	t_cmd *new_node;
 
 	curr = process->tokens;
-	head = NULL;
-	last = NULL;
 	while (curr)
 	{
-		if (!ft_strncmp(curr->content, " ", 2) || \
-			((char *)curr->content)[0] == '|')
+		if (!ft_strncmp(curr->content, " ", 2)
+			|| ((char *)curr->content)[0] == '|')
 		{
 			curr = curr->next;
 			continue ;
 		}
-		new = ft_new_cmd();
-		if (!new)
+		new_node = create_one_cmd(&curr);
+		if (!new_node)
 			return (0);
-		new->args = malloc(sizeof(char *) * (count_args(curr) + 1));
-		fill_cmd(new, &curr);
-		if (!head)
-			head = new;
-		else
-			last->next = new;
-		last = new;
+		ft_cmdadd_back(&process->commands, new_node);
 	}
-	process->commands = head;
 	return (1);
 }

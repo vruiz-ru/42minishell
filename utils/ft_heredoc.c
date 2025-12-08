@@ -12,37 +12,15 @@
 
 #include "../headers/minishell.h"
 #include <fcntl.h>
-/* "<<" 
-
-Feeds a block of text as stdin to a command.
-
-Edge Cases:
-
-    Delimiters: The ending delimiter (EOF or any chosen word) must appear alone on a line with no leading/trailing spaces.
-
-    Quoting delimiter: If you quote the delimiter (e.g., <<'EOF'), variable and command expansion inside the here-doc is suppressed. Unquoted, expansions occur.
-
-    Leading tabs: <<-EOF (dash/hyphen) strips leading TABs from the here-doc body, allowing you to indent here-doc blocks.
-
-    Multiple here-docs: You can have several here-docs in the same command line (cat <<A <<B ...).
-
-    Accidental file overwrite: Here-doc does NOT itself overwrite files, but if combined with redirection, order matters (e.g., cat <<EOF >file is safe; file is truncated before reading the here-doc).
-
-    Command substitution: If expansions inside the here-doc cause errors (referencing unset vars, for example), it might affect the script’s flow.
-
-    EOF conflicts: If "EOF" (or the delimiter word) appears by chance in the data, the here-doc ends prematurely.
-
-*/
 
 extern int	g_signal_status;
 
-/* Handler especial solo para Heredoc: Cierra STDIN para desbloquear readline */
 static void	heredoc_sigint(int sig)
 {
 	(void)sig;
 	g_signal_status = 130;
 	write(STDOUT_FILENO, "\n", 1);
-	close(STDIN_FILENO); // <--- El truco maestro
+	close(STDIN_FILENO);
 }
 
 static void	write_to_tmp(int fd, char *line)
@@ -73,12 +51,12 @@ static int	process_heredoc_loop(int fd, char *delimiter)
 	}
 	return (0);
 }
-/* Función principal limpia y modular */
+
 int	ft_heredoc(char *delimiter)
 {
-	int		fd;
-	int		stdin_backup;
-	int		status;
+	int	fd;
+	int	stdin_backup;
+	int	status;
 
 	stdin_backup = dup(STDIN_FILENO);
 	if (stdin_backup < 0)

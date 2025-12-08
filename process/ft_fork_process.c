@@ -10,32 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
 #include "../builtins/builtins.h"
+#include "../headers/minishell.h"
 #include <errno.h>
 #include <sys/stat.h>
 
-/* 1. Ejecuta comando externo */
 static void	ft_execute_external(t_process *process, t_cmd *cmd)
 {
-	char	*path;
-	struct stat sb; // [NUEVO] Estructura para chequear si es directorio
+	char		*path;
+	struct stat	sb;
 
 	path = ft_get_cmd_path(cmd->args[0], process->envs->parent_env);
 	if (!path)
-	
 		cmd_not_found(cmd->args[0]);
 	if (execve(path, cmd->args, process->envs->parent_env) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		// Verificamos explícitamente si es un directorio
-        if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode))
-        {
-            ft_putstr_fd(cmd->args[0], 2);
-            ft_putstr_fd(": Is a directory\n", 2);
-            free(path);
-            exit(126);
-        }
+		if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode))
+		{
+			ft_putstr_fd(cmd->args[0], 2);
+			ft_putstr_fd(": Is a directory\n", 2);
+			free(path);
+			exit(126);
+		}
 		perror(cmd->args[0]);
 		free(path);
 		if (errno == EACCES)
@@ -43,37 +40,31 @@ static void	ft_execute_external(t_process *process, t_cmd *cmd)
 		exit(1);
 	}
 }
-/* 2. Lógica del proceso hijo */
-static void child_process(t_process *proc, t_cmd *cmd, int *pipefd, int prev)
-{
-    proc->pid = fork();
-    if (proc->pid == 0)
-    {
-        // 1. RESTAURAR SEÑALES ORIGINALES
-        // Queremos que 'cat' muera con Ctrl+C (SIG_DFL = Default)
-        signal(SIGINT, SIG_DFL); 
-        // Queremos que 'cat' pueda generar core dump con Ctrl+\ (SIG_DFL)
-        signal(SIGQUIT, SIG_DFL);
 
-        config_pipes(cmd, pipefd, prev);
-       // apply_redirections(cmd);
-		if (ft_apply_redirs(cmd) != 0) 
-            exit(1);
-        int ret = ft_builtins(proc, cmd);
-		if (ret != -1) // Si era un builtin (retorno != -1)
-    		exit(ret); // Salimos con SU código (0 o 1), no con 0 inventado
-        ft_execute_external(proc, cmd);
-    }
+static void	child_process(t_process *proc, t_cmd *cmd, int *pipefd, int prev)
+{
+	int	ret;
+
+	proc->pid = fork();
+	if (proc->pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		config_pipes(cmd, pipefd, prev);
+		if (ft_apply_redirs(cmd) != 0)
+			exit(1);
+		ret = ft_builtins(proc, cmd);
+		if (ret != -1)
+			exit(ret);
+		ft_execute_external(proc, cmd);
+	}
 }
-/* 3. Espera a los hijos y gestiona señales (Nueva función extraída) */
-//Modifica la firma de wait_children para recibir el last_pid
+
 static void	wait_children(t_process *process, int last_pid)
 {
 	int	status;
 
-	// Esperamos específicamente al último comando para coger SU status
-    waitpid(last_pid, &status, 0);
-	// Guardamos ese status (es el que importa para $?)
+	waitpid(last_pid, &status, 0);
 	if (WIFEXITED(status))
 		process->status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
@@ -91,18 +82,18 @@ static void	wait_children(t_process *process, int last_pid)
 		else
 			process->status = 128 + WTERMSIG(status);
 	}
-	// Ahora esperamos al resto de zombis (los otros comandos del pipe)
-    while (wait(NULL) > 0);
+	while (wait(NULL) > 0)
+		;
 }
 
-/* 4. Bucle principal */
 int	ft_fork_process(t_process *process)
 {
 	t_cmd	*cmd;
 	int		pipefd[2];
 	int		prev_fd;
-	pid_t last_pid = 0; // [NUEVO] Variable para guardar el PID
+	pid_t	last_pid;
 
+	last_pid = 0;
 	cmd = process->commands;
 	prev_fd = 0;
 	signal(SIGINT, SIG_IGN);
@@ -111,7 +102,7 @@ int	ft_fork_process(t_process *process)
 		if (cmd->next && pipe(pipefd) == -1)
 			return (perror("pipe"), 0);
 		child_process(process, cmd, pipefd, prev_fd);
-		last_pid = process->pid; // [NUEVO] Actualizamos en cada vuelta. Al final quedará el último.
+		last_pid = process->pid;
 		close_fds(cmd, prev_fd);
 		if (cmd->next)
 		{
@@ -121,36 +112,8 @@ int	ft_fork_process(t_process *process)
 		cmd = cmd->next;
 	}
 	if (prev_fd != 0)
-    	close(prev_fd);
+		close(prev_fd);
 	wait_children(process, last_pid);
 	signal(SIGINT, ft_sigint);
 	return (1);
 }
-
-
-/*
-int	ft_fork_process(t_process *process, int(*built_f)(t_process *))
-{
-	int	status;
-
-	if (!ft_isbuiltin(process))
-		return (0);
-	process->pid = fork();
-	if (process->pid < 0)
-		return (perror("fork"), exit(EXIT_FAILURE), 0);
-	if (process->pid == 0)
-	{
-		if (built_f(process))
-			exit(EXIT_SUCCESS);
-		exit(EXIT_FAILURE);
-	}
-	if (waitpid(process->pid, &status, 0) < 0)
-		return (perror("waitpid"), exit(EXIT_FAILURE), 0);
-	if (WIFEXITED(status))
-		process->status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		process->status = 128 + WTERMSIG(status);
-	else if (WIFSIGNALED(status))
-		process->status = 128 + WIFSTOPPED(status);
-	return(1);
-}*/

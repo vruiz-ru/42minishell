@@ -40,34 +40,19 @@ int	is_redir(char *str)
 		return (1);
 	return (0);
 }
-/*
- Abre el archivo correspondiente o lanza el heredoc 
-void	open_file(t_cmd *cmd, char *symbol, char *file)
+void	ft_cmdadd_back(t_cmd **lst, t_cmd *new)
 {
-    // CASO HEREDOC (<<)
-	if (!ft_strncmp(symbol, "<<", 3))
+	t_cmd	*temp;
+
+	if (!lst || !new)
+		return ;
+	if (!*lst)
 	{
-		if (cmd->fd_in != 0)
-			close(cmd->fd_in);
-		cmd->fd_in = ft_heredoc(file); // 'file' aquí es el delimitador
+		*lst = new;
+		return ;
 	}
-    // CASO INPUT (<)
-	else if (!ft_strncmp(symbol, "<", 2))
-	{
-		if (cmd->fd_in != 0)
-			close(cmd->fd_in);
-		cmd->fd_in = open(file, O_RDONLY);
-		if (cmd->fd_in < 0)
-			perror(file);
-	}
-    // CASOS OUTPUT (>, >>)
-	else
-	{
-		if (cmd->fd_out != 1)
-			close(cmd->fd_out);
-		if (!ft_strncmp(symbol, ">", 2))
-			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else
-			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	}
-}*/
+	temp = *lst;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = new;
+}
