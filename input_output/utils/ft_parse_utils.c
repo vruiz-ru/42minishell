@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:19:55 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/09 19:32:54 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../input.h"
+#include "../input_output.h"
 
 static int	assign_value(char **env, char **dest, int idx)
 {

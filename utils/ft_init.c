@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:32:12 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/09 14:31:04 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 21:51:00 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,28 @@ static t_process	*init(void)
 	ft_memset(process->envs, 0, sizeof(t_envs));
 	ft_memset(process->prompt, 0, sizeof(t_prompt));
 	return (process);
+}
+
+static void	ensure_minimal_env(t_process *process)
+{
+	char	*cwd;
+	char	*tmp;
+
+	if (ft_mapitem_index(process->envs->parent_env, "PWD") == -1)
+	{
+		cwd = getcwd(NULL, 0);
+		if (cwd)
+		{
+			tmp = ft_strjoin("PWD=", cwd);
+			ft_mapitem_add(&process->envs->parent_env, tmp);
+			free(cwd);
+			free(tmp);
+		}
+	}
+	if (ft_mapitem_index(process->envs->parent_env, "OLDPWD") == -1)
+	{
+		ft_mapitem_add(&process->envs->parent_env, "OLDPWD");
+	}
 }
 
 static void	increment_shell_level(t_process *proc)
@@ -56,15 +78,16 @@ static void	increment_shell_level(t_process *proc)
 	free(entry);
 }
 
-int	init_parent(t_process **parent, char *name, char *envp[])
+int	ft_init_parent(t_process **parent, char *name, char *envp[])
 {
 	*parent = init();
 	if (!*parent)
 		return (0);
-	if (*envp)
+	if (envp && *envp)
 		(*parent)->envs->parent_env = ft_mapdup(envp);
-	if (*envp && !(*parent)->envs->parent_env)
-		return (perror("malloc"), exit(EXIT_FAILURE), 0);
+	ensure_minimal_env(*parent);
+	increment_shell_level(*parent);
+	(*parent)->envs->static_env = ft_mapdup((*parent)->envs->parent_env);
 	(*parent)->prompt->shell_name = ft_strdup(name);
 	if (!(*parent)->prompt->shell_name)
 		return (perror("malloc"), exit(EXIT_FAILURE), 0);
@@ -79,6 +102,5 @@ int	init_parent(t_process **parent, char *name, char *envp[])
 	(*parent)->forks = 1;
 	(*parent)->pid = getpid();
 	(*parent)->status = 0;
-	increment_shell_level(*parent);
 	return (1);
 }

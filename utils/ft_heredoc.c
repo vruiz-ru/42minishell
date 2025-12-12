@@ -13,8 +13,6 @@
 #include "../headers/minishell.h"
 #include <fcntl.h>
 
-extern int	g_signal_status;
-
 static void	heredoc_sigint(int sig)
 {
 	(void)sig;
@@ -30,7 +28,8 @@ static void	write_to_tmp(int fd, char *line)
 	free(line);
 }
 
-static int	process_heredoc_loop(int fd, char *delimiter)
+static int	process_heredoc_loop(int fd, char *delimiter, int expand,
+		t_process *proc)
 {
 	char	*line;
 
@@ -48,12 +47,16 @@ static int	process_heredoc_loop(int fd, char *delimiter)
 			free(line);
 			break ;
 		}
+		if (expand)
+		{
+			line = ft_expand_heredoc_line(proc, line);
+		}
 		write_to_tmp(fd, line);
 	}
 	return (0);
 }
 
-int	ft_heredoc(char *delimiter)
+int	ft_heredoc(char *delimiter, int expand, t_process *proc)
 {
 	int	fd;
 	int	stdin_backup;
@@ -66,7 +69,7 @@ int	ft_heredoc(char *delimiter)
 	if (fd < 0)
 		return (close(stdin_backup), perror("heredoc open"), -1);
 	signal(SIGINT, heredoc_sigint);
-	status = process_heredoc_loop(fd, delimiter);
+	status = process_heredoc_loop(fd, delimiter, expand, proc);
 	dup2(stdin_backup, STDIN_FILENO);
 	close(stdin_backup);
 	close(fd);

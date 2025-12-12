@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:20:33 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/05 22:15:41 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	ft_free_cmds(t_cmd *cmds)
 	}
 }
 
-void	free_process(t_process *proc)
+void	ft_free_process(t_process *proc)
 {
 	if (proc->envs && proc->envs->parent_env)
 		free_env_items(&proc->envs->parent_env);

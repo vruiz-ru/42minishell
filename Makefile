@@ -46,27 +46,22 @@ LIBRARIES = $(FLAGS_LIBFT) -lreadline
 BUILTINS_DIR = builtins/
 HANDLERS_DIR = handlers/
 UTILS_DIR = utils/
-INPUT_DIR = input/
-MAIN_DIR = main/
-PARSE_TOKENS_DIR = $(INPUT_DIR)parse_tokens/
-PROCESS_DIR = process/
+INPUT_OUTPUT_DIR = input_output/
 
 OBJS_BUILTINS = $(BUILTINS_DIR)objs/
 OBJS_BUILTINS_UTILS = $(BUILTINS_DIR)$(UTILS_DIR)objs/
 OBJS_HANDLERS = $(HANDLERS_DIR)objs/
 OBJS_UTILS = $(UTILS_DIR)objs/
-OBJS_INPUT = $(INPUT_DIR)objs/
-OBJS_PARSE_TOKENS = $(PARSE_TOKENS_DIR)objs/
-OBJS_PARSE_TOKENS_UTILS = $(PARSE_TOKENS_DIR)$(UTILS_DIR)objs/
-OBJS_PROCESS = $(PROCESS_DIR)objs/
-OBJS_MAIN = $(MAIN_DIR)objs/
+OBJS_INPUT_OUTPUT = $(INPUT_OUTPUT_DIR)objs/
+OBJS_INPUT_OUTPUT_UTILS = $(INPUT_OUTPUT_DIR)$(UTILS_DIR)objs/
 
 # SOURCES
 SRCS1 = $(BUILTINS_DIR)$(UTILS_DIR)ft_cd_feats.c \
         $(BUILTINS_DIR)$(UTILS_DIR)ft_cd_utils.c \
         $(BUILTINS_DIR)$(UTILS_DIR)ft_getcwd.c \
         $(BUILTINS_DIR)$(UTILS_DIR)ft_getvar.c \
-		$(BUILTINS_DIR)$(UTILS_DIR)ft_isbuiltin.c
+		$(BUILTINS_DIR)$(UTILS_DIR)ft_isbuiltin.c \
+		$(BUILTINS_DIR)$(UTILS_DIR)ft_export_utils.c
 
 SRCS2 = $(BUILTINS_DIR)ft_builtins.c $(BUILTINS_DIR)ft_cd.c \
         $(BUILTINS_DIR)ft_clear.c $(BUILTINS_DIR)ft_echo.c \
@@ -76,43 +71,44 @@ SRCS2 = $(BUILTINS_DIR)ft_builtins.c $(BUILTINS_DIR)ft_cd.c \
 
 SRCS3 = $(HANDLERS_DIR)ft_sigint.c
 
-SRCS4 = $(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_inputvar_utils.c \
-        $(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_parse_utils.c \
-        $(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_quote_utils.c \
-		$(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_specialvars.c \
-		$(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)ft_cmds_utils.c
+SRCS4 = $(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_inputvar_utils.c \
+        $(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_parse_utils.c \
+        $(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_quote_utils.c \
+		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_specialvars.c \
+		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_cmds_utils.c \
+		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_inputvar_helpers.c \
+		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_inputvar_parse.c
 
-SRCS5 = $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_inputvar.c \
-        $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_parse_line.c \
-        $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_parse_token.c \
-        $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_quote.c \
-        $(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_std.c\
-		$(INPUT_DIR)$(PARSE_TOKENS_DIR)ft_cmds.c
+SRCS5 = $(INPUT_OUTPUT_DIR)ft_inputvar.c \
+        $(INPUT_OUTPUT_DIR)ft_parse_line.c \
+        $(INPUT_OUTPUT_DIR)ft_parse_token.c \
+        $(INPUT_OUTPUT_DIR)ft_quote.c \
+        $(INPUT_OUTPUT_DIR)ft_std.c \
+		$(INPUT_OUTPUT_DIR)ft_cmds.c \
+		$(INPUT_OUTPUT_DIR)ft_syntax.c \
+		$(INPUT_OUTPUT_DIR)ft_prompt.c \
+		$(INPUT_OUTPUT_DIR)ft_readinput.c \
+		$(INPUT_OUTPUT_DIR)ft_fork_process.c \
+		$(INPUT_OUTPUT_DIR)ft_exec_utils.c \
+		$(INPUT_OUTPUT_DIR)ft_pipe_utils.c \
+		$(INPUT_OUTPUT_DIR)ft_exec_redirs.c
 
-SRCS6 = $(INPUT_DIR)ft_prompt.c $(INPUT_DIR)ft_readinput.c 
-
-SRCS7 = $(PROCESS_DIR)ft_fork_process.c \
-		$(PROCESS_DIR)ft_exec_utils.c \
-		$(PROCESS_DIR)ft_pipe_utils.c \
-		$(PROCESS_DIR)ft_exec_redirs.c
-
-SRCS8 = $(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_init.c \
+SRCS6 = $(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_init.c \
         $(UTILS_DIR)ft_clear_strtok.c $(UTILS_DIR)ft_construct.c \
         $(UTILS_DIR)ft_addspace.c $(UTILS_DIR)ft_safeadd_nodes.c\
-        $(UTILS_DIR)ft_heredoc.c $(UTILS_DIR)ft_io_utils.c
-        
-SRCS9 = $(MAIN_DIR)main.c
+        $(UTILS_DIR)ft_heredoc.c $(UTILS_DIR)ft_io_utils.c \
+        $(UTILS_DIR)ft_shell_loop.c $(UTILS_DIR)ft_reset_utils.c
+
+SRCS7 = main.c
 
 # OBJECTS
 OBJS =  $(SRCS1:$(BUILTINS_DIR)$(UTILS_DIR)%.c=$(OBJS_BUILTINS_UTILS)%.o) \
         $(SRCS2:$(BUILTINS_DIR)%.c=$(OBJS_BUILTINS)%.o) \
         $(SRCS3:$(HANDLERS_DIR)%.c=$(OBJS_HANDLERS)%.o) \
-        $(SRCS4:$(INPUT_DIR)$(PARSE_TOKENS_DIR)$(UTILS_DIR)%.c=$(OBJS_PARSE_TOKENS_UTILS)%.o) \
-        $(SRCS5:$(INPUT_DIR)$(PARSE_TOKENS_DIR)%.c=$(OBJS_PARSE_TOKENS)%.o) \
-        $(SRCS6:$(INPUT_DIR)%.c=$(OBJS_INPUT)%.o) \
-        $(SRCS7:$(PROCESS_DIR)%.c=$(OBJS_PROCESS)%.o) \
-		$(SRCS8:$(UTILS_DIR)%.c=$(OBJS_UTILS)%.o) \
-        $(SRCS9:$(MAIN_DIR)%.c=$(OBJS_MAIN)%.o) 
+        $(SRCS4:$(INPUT_OUTPUT_DIR)$(UTILS_DIR)%.c=$(OBJS_INPUT_OUTPUT_UTILS)%.o) \
+        $(SRCS5:$(INPUT_OUTPUT_DIR)%.c=$(OBJS_INPUT_OUTPUT)%.o) \
+		$(SRCS6:$(UTILS_DIR)%.c=$(OBJS_UTILS)%.o) \
+        $(SRCS7:%.c=%.o) 
 
 all: $(NAME)
 
@@ -123,44 +119,35 @@ $(NAME): $(OBJS)
 
 $(OBJS_BUILTINS_UTILS)%.o: $(BUILTINS_DIR)$(UTILS_DIR)%.c
 	@mkdir -p $(OBJS_BUILTINS_UTILS)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS) -c $< -o $@
 
 $(OBJS_BUILTINS)%.o: $(BUILTINS_DIR)%.c
 	@mkdir -p $(OBJS_BUILTINS)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS) -c $< -o $@
 
 $(OBJS_HANDLERS)%.o: $(HANDLERS_DIR)%.c
 	@mkdir -p $(OBJS_HANDLERS)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS) -c $< -o $@
 
-$(OBJS_PARSE_TOKENS_UTILS)%.o: $(PARSE_TOKENS_DIR)$(UTILS_DIR)%.c
-	@mkdir -p $(OBJS_PARSE_TOKENS_UTILS)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
+$(OBJS_INPUT_OUTPUT_UTILS)%.o: $(INPUT_OUTPUT_DIR)$(UTILS_DIR)%.c
+	@mkdir -p $(OBJS_INPUT_OUTPUT_UTILS)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS) -c $< -o $@
 
-$(OBJS_PARSE_TOKENS)%.o: $(PARSE_TOKENS_DIR)%.c
-	@mkdir -p $(OBJS_PARSE_TOKENS)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
+$(OBJS_INPUT_OUTPUT)%.o: $(INPUT_OUTPUT_DIR)%.c
+	@mkdir -p $(OBJS_INPUT_OUTPUT)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS) -c $< -o $@
 
-$(OBJS_INPUT)%.o: $(INPUT_DIR)%.c
-	@mkdir -p $(OBJS_INPUT)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
-
-$(OBJS_PROCESS)%.o: $(PROCESS_DIR)%.c
-	@mkdir -p $(OBJS_PROCESS)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
+%.o: %.c
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS) -c $< -o $@
 
 $(OBJS_UTILS)%.o: $(UTILS_DIR)%.c
 	@mkdir -p $(OBJS_UTILS)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
-
-$(OBJS_MAIN)%.o: $(MAIN_DIR)%.c
-	@mkdir -p $(OBJS_MAIN)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS)-c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) $(ASAN_FLAGS) -c $< -o $@
 
 clean:
 	@rm -Rf $(OBJS_BUILTINS_UTILS) $(OBJS_BUILTINS) $(OBJS_HANDLERS)
-	@rm -Rf $(OBJS_PARSE_TOKENS) $(OBJS_PARSE_TOKENS_UTILS)
-	@rm -Rf $(OBJS_INPUT) $(OBJS_UTILS) $(OBJS_MAIN) $(OBJS_PROCESS)
+	@rm -Rf $(OBJS_INPUT_OUTPUT) $(OBJS_INPUT_OUTPUT_UTILS)
+	@rm -Rf $(OBJS_UTILS) *.o
 	@$(CLEAN_LIBFT)
 	@echo "$(GREEN)Object files removed$(RESET)"
 

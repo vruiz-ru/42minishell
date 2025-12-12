@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quote_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:28:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/03 22:09:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../input.h"
+#include "../input_output.h"
 
 static void	process_pre_quote(t_process *proc, char *chunk)
 {

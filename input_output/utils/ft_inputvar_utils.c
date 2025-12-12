@@ -3,16 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   ft_inputvar_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 18:23:06 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/09 18:23:13 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:13:55 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../input.h"
+#include "../input_output.h"
 
-int	contains_variable(char *line)
+static int	add_split_array(t_list **tokens, char **split_tokens)
+{
+	int		i;
+	char	*token_copy;
+
+	i = 0;
+	while (split_tokens[i])
+	{
+		token_copy = ft_strdup(split_tokens[i]);
+		if (!token_copy)
+		{
+			perror("malloc");
+			return (0);
+		}
+		ft_safeadd_tokens(tokens, &token_copy);
+		i++;
+	}
+	return (1);
+}
+
+int	ft_add_split_tokens(t_list **tokens, char *value)
+{
+	char	**split_tokens;
+	char	*token_copy;
+
+	if (!value)
+		return (1);
+	if (ft_strchr(value, ' '))
+	{
+		split_tokens = ft_split(value, ' ');
+		if (!split_tokens)
+			return (0);
+		if (!add_split_array(tokens, split_tokens))
+		{
+			ft_free_array(split_tokens);
+			return (0);
+		}
+		ft_free_array(split_tokens);
+	}
+	else
+	{
+		token_copy = ft_strdup(value);
+		if (!token_copy)
+			return (0);
+		ft_safeadd_tokens(tokens, &token_copy);
+	}
+	return (1);
+}
+
+int	ft_contains_variable(char *line)
 {
 	int	i;
 
@@ -26,7 +75,7 @@ int	contains_variable(char *line)
 	return (0);
 }
 
-int	return_value(t_process *process, char *line)
+int	ft_return_value(t_process *process, char *line)
 {
 	char	**p_env;
 	char	**s_env;
@@ -47,33 +96,8 @@ int	return_value(t_process *process, char *line)
 		value = ft_getvar(s_env, line);
 	if (value == NULL)
 		return (0);
-	ft_safeadd_tokens(&process->tokens, &value);
+	if (!ft_add_split_tokens(&process->tokens, value))
+		return (0);
+	free(value);
 	return (1);
-}
-
-int	is_var_start(char c)
-{
-	if (ft_isalnum(c) || c == '_' || c == '?' || c == '$')
-		return (1);
-	return (0);
-}
-
-int	check_ansi_quote(char *line, int idx, char delim)
-{
-	int	back;
-	int	slashes;
-
-	if (delim == '\'' && idx > 0 && line[idx - 1] == '$')
-	{
-		back = idx - 2;
-		slashes = 0;
-		while (back >= 0 && line[back] == '\\')
-		{
-			slashes++;
-			back--;
-		}
-		if (slashes % 2 == 0)
-			return (1);
-	}
-	return (0);
 }

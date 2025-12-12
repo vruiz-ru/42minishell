@@ -3,25 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readinput.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 18:35:16 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/09 14:38:10 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "input.h"
-
-extern int	g_signal_status;
+#include "../headers/minishell.h"
+#include "input_output.h"
 
 void	ft_readinput(t_process *process)
 {
+	int	exit_code;
+
 	process->prompt->display = ft_prompt(process);
-	if (process->prompt->display == NULL)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
 	process->line = readline(process->prompt->display);
 	if (g_signal_status != 0)
 	{
@@ -31,7 +27,10 @@ void	ft_readinput(t_process *process)
 	if (process->line == NULL)
 	{
 		ft_putstr_fd("exit\n", 1);
-		exit(process->status);
+		exit_code = process->status;
+		ft_free_process(process);
+		rl_clear_history();
+		exit(exit_code);
 	}
 	if (*(process->line) == '\0')
 		return ;

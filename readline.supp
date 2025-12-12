@@ -1245,4 +1245,15 @@
    fun:rl_expand_prompt
    fun:rl_set_prompt
    fun:readline
+}{
+    leak readline
+    Memcheck:Leak
+    ...
+    fun:readline
+}
+{
+    leak add_history
+    Memcheck:Leak
+    ...
+    fun:add_history
 }

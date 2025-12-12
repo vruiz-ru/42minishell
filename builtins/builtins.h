@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 18:47:46 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/09 16:54:01 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 21:51:00 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ int		path_input(t_process *process, t_cmd *cmd);
 char	*ft_getcwd(void);
 char	*ft_getvar(char **envp, char *var_name);
 int		ft_is_parent_builtin(t_cmd *cmd);
+//      EXPORT
+void	ft_print_export_line(char *str);
+void	ft_export_from_static(t_process *process, char *name);
+void	ft_export_logic(t_process *process, char *arg);
+int		ft_is_valid_id(char *str);
 // COMMANDS
 int		ft_builtins(t_process *process, t_cmd *cmd);
 int		ft_echo(t_process *process, t_cmd *cmd);

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_specialvars.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 17:04:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/09 18:19:32 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../input.h"
+#include "../input_output.h"
 
 int	ft_specialvars(t_process *proc, char **var_name, char ch)
 {

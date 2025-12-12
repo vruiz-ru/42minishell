@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 22:07:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/03 22:41:47 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../input.h"
+#include "input_output.h"
 
 static int	is_sep_char(char c)
 {
@@ -82,55 +82,22 @@ static char	*format_line(char *line)
 	fill_line(new, line, 0, 0);
 	return (new);
 }
-/*
-int	ft_parse_line(t_process *process)
-{
-	char	*cmd;
-	char	*fmt;
-
-	if (contains_variable(process->line))
-		if (!ft_inputvar(process, &process->line))
-			return (ft_clear_strtok(), 0);
-	fmt = format_line(process->line);
-	if (!fmt)
-		return (perror("malloc"), ft_clear_strtok(), 0);
-	free(process->line);
-	process->line = fmt;
-	cmd = ft_strtok(process->line, " ");
-	ft_safeadd_tokens(&process->tokens, &cmd);
-	if (!ft_strchr(process->line, ' '))
-		return (ft_clear_strtok(), 1);
-	if (!ft_std(process, process->line) && !ft_quote(process, process->line))
-		return (ft_clear_strtok(), 0);
-	return (ft_clear_strtok(), 1);
-}*/
 
 int	ft_parse_line(t_process *process)
 {
-	char	*cmd;
 	char	*fmt;
 
-	if (contains_variable(process->line))
+	if (ft_contains_variable(process->line))
 		if (!ft_inputvar(process, &process->line))
-			return (ft_clear_strtok(), 0);
+			return (0);
 	fmt = format_line(process->line);
 	if (!fmt)
-		return (perror("malloc"), ft_clear_strtok(), 0);
+		return (perror("malloc"), 0);
 	free(process->line);
 	process->line = fmt;
-	
-	// --- FIX: Delimitadores y Espacio Seguro ---
-	cmd = ft_strtok(process->line, " \t"); // Soporte para TABs
-	ft_safeadd_tokens(&process->tokens, &cmd);
-	
-	// Solo añadimos espacio si YA hay algo en la lista (evita args vacíos al inicio)
-	if (process->tokens) 
-		ft_addspace(&process->tokens);
-	// -------------------------------------------
-
-	if (!ft_strchr(process->line, ' '))
-		return (ft_clear_strtok(), 1);
-	if (!ft_std(process, process->line) && !ft_quote(process, process->line))
-		return (ft_clear_strtok(), 0);
-	return (ft_clear_strtok(), 1);
+	if (!ft_tokenize_line(process, process->line))
+		return (0);
+	if (!ft_check_syntax(process))
+		return (0);
+	return (1);
 }
