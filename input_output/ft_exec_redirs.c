@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec_redirs.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/09 14:36:41 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:43:36 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,11 @@ int	ft_apply_redirs(t_cmd *cmd)
 		}
 		else if (io->type == IO_OUT || io->type == IO_APPEND)
 		{
-			if (set_outfile(io->path, io->type))
+			if (!ft_strncmp(io->path, "2>&1", 5))
+			{
+				dup2(STDOUT_FILENO, STDERR_FILENO);
+			}
+			else if (set_outfile(io->path, io->type))
 				return (1);
 		}
 		curr = curr->next;

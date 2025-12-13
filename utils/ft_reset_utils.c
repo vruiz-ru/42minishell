@@ -6,11 +6,11 @@
 /*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 21:40:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 21:51:00 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 14:44:47 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../headers/minishell.h"
 
 void	ft_reset_utils(t_process **process)
 {

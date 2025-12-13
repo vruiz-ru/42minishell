@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:43:36 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ t_cmd	*ft_new_cmd(void)
 
 int	is_redir(char *str)
 {
+	int	i;
+
 	if (!ft_strncmp(str, "<<", 3))
 		return (1);
 	if (!ft_strncmp(str, ">>", 3))
@@ -36,6 +38,11 @@ int	is_redir(char *str)
 	if (!ft_strncmp(str, "<", 2))
 		return (1);
 	if (!ft_strncmp(str, ">", 2))
+		return (1);
+	i = 0;
+	while (str[i] && ft_isdigit(str[i]))
+		i++;
+	if (i > 0 && (str[i] == '>' || str[i] == '<'))
 		return (1);
 	return (0);
 }

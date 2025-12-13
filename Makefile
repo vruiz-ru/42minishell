@@ -77,7 +77,10 @@ SRCS4 = $(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_inputvar_utils.c \
 		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_specialvars.c \
 		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_cmds_utils.c \
 		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_inputvar_helpers.c \
-		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_inputvar_parse.c
+		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_inputvar_parse.c \
+		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_redir_utils.c \
+		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_cmds_helpers.c \
+		$(INPUT_OUTPUT_DIR)$(UTILS_DIR)ft_parse_helpers.c
 
 SRCS5 = $(INPUT_OUTPUT_DIR)ft_inputvar.c \
         $(INPUT_OUTPUT_DIR)ft_parse_line.c \

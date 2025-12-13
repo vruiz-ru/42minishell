@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:20:33 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 14:36:59 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,31 +67,41 @@ void	ft_free_cmds(t_cmd *cmds)
 	}
 }
 
+static void	ft_free_envs(t_envs *envs)
+{
+	if (!envs)
+		return ;
+	if (envs->parent_env)
+		free_env_items(&envs->parent_env);
+	if (envs->static_env)
+		free_env_items(&envs->static_env);
+	free(envs);
+}
+
 void	ft_free_process(t_process *proc)
 {
-	if (proc->envs && proc->envs->parent_env)
-		free_env_items(&proc->envs->parent_env);
-	if (proc->envs && proc->envs->static_env)
-		free_env_items(&proc->envs->static_env);
-	if (proc->envs)
-		free(proc->envs);
-	if (proc->prompt && proc->prompt->shell_name)
-		free(proc->prompt->shell_name);
-	if (proc->prompt && proc->prompt->display)
-		free(proc->prompt->display);
-	if (proc->prompt && proc->prompt->home_path)
-		free(proc->prompt->home_path);
-	if (proc->prompt && proc->prompt->current_wd)
-		free(proc->prompt->current_wd);
-	if (proc->prompt && proc->prompt->last_wd)
-		free(proc->prompt->last_wd);
+	if (!proc)
+		return ;
+	ft_free_envs(proc->envs);
 	if (proc->prompt)
+	{
+		if (proc->prompt->shell_name)
+			free(proc->prompt->shell_name);
+		if (proc->prompt->display)
+			free(proc->prompt->display);
+		if (proc->prompt->home_path)
+			free(proc->prompt->home_path);
+		if (proc->prompt->current_wd)
+			free(proc->prompt->current_wd);
+		if (proc->prompt->last_wd)
+			free(proc->prompt->last_wd);
 		free(proc->prompt);
+	}
 	if (proc->line)
 		free(proc->line);
 	if (proc->tokens)
 		ft_lstclear(&proc->tokens, free);
-	if (proc)
-		free(proc);
-	proc = NULL;
+	if (proc->commands)
+		ft_free_cmds(proc->commands);
+	free(proc);
 }

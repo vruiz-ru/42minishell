@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 13:41:27 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/02 19:03:39 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 15:36:38 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-#include <fcntl.h>
 
 static void	heredoc_sigint(int sig)
 {
@@ -40,6 +39,10 @@ static int	process_heredoc_loop(int fd, char *delimiter, int expand,
 		{
 			if (g_signal_status == 130)
 				return (1);
+			ft_putstr_fd("minishell: warning: here-document delimited by\
+				 end-of-file (wanted `", STDERR_FILENO);
+			ft_putstr_fd(delimiter, STDERR_FILENO);
+			ft_putstr_fd("')\n", STDERR_FILENO);
 			break ;
 		}
 		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1))
@@ -48,9 +51,7 @@ static int	process_heredoc_loop(int fd, char *delimiter, int expand,
 			break ;
 		}
 		if (expand)
-		{
 			line = ft_expand_heredoc_line(proc, line);
-		}
 		write_to_tmp(fd, line);
 	}
 	return (0);

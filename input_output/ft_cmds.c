@@ -3,63 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmds.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 17:54:08 by aghergut          #+#    #+#             */
-/*   Updated: 2025/11/09 17:59:26 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 17:59:53 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void	parse_redir(t_cmd *node, char *redir, char *file, t_process *proc)
+void	handle_fd_redir(t_cmd *node, char *redir)
 {
-	int	heredoc_fd;
-	int	expand;
-	int	len;
+	int		src_fd;
+	int		target_fd;
+	char	*fd_str;
 
+	src_fd = ft_atoi(redir);
+	fd_str = ft_strchr(redir, '&');
+	if (fd_str && fd_str[1])
+		target_fd = ft_atoi(fd_str + 1);
+	else
+		return ;
+	if (src_fd == 2 && target_fd == 1)
+		ft_add_io(node, IO_OUT, "2>&1", -1);
+}
+
+void	parse_redir(t_cmd *node, char *redir, char *file, t_process *proc)
+{
 	if (!ft_strncmp(redir, "<<", 3))
-	{
-		expand = 1;
-		len = ft_strlen(file);
-		if (len > 0 && file[len - 1] == 1)
-		{
-			expand = 0;
-			file[len - 1] = '\0';
-		}
-		heredoc_fd = ft_heredoc(file, expand, proc);
-		ft_add_io(node, IO_HEREDOC, "heredoc", heredoc_fd);
-	}
+		handle_heredoc_redir(node, file, proc);
 	else if (!ft_strncmp(redir, ">>", 3))
 		ft_add_io(node, IO_APPEND, file, -1);
 	else if (!ft_strncmp(redir, "<", 2))
 		ft_add_io(node, IO_IN, file, -1);
 	else if (!ft_strncmp(redir, ">", 2))
 		ft_add_io(node, IO_OUT, file, -1);
-}
-
-static int	count_args(t_list *tokens)
-{
-	int		i;
-	char	*str;
-
-	i = 0;
-	while (tokens && ((char *)tokens->content)[0] != '|')
-	{
-		str = (char *)tokens->content;
-		if (is_redir(str))
-		{
-			tokens = tokens->next;
-			if (tokens)
-				tokens = tokens->next;
-		}
-		else
-		{
-			i++;
-			tokens = tokens->next;
-		}
-	}
-	return (i);
+	else
+		handle_fd_redir_check(node, redir);
 }
 
 static void	fill_cmd(t_cmd *node, t_list **tokens, t_process *proc)
@@ -72,19 +52,9 @@ static void	fill_cmd(t_cmd *node, t_list **tokens, t_process *proc)
 	{
 		str = (char *)(*tokens)->content;
 		if (is_redir(str))
-		{
-			*tokens = (*tokens)->next;
-			if (*tokens)
-			{
-				parse_redir(node, str, (char *)(*tokens)->content, proc);
-				*tokens = (*tokens)->next;
-			}
-		}
+			handle_redir_token(node, tokens, proc);
 		else
-		{
-			node->args[i++] = ft_strdup(str);
-			*tokens = (*tokens)->next;
-		}
+			handle_arg_token(node, tokens, &i);
 	}
 	node->args[i] = NULL;
 }
@@ -105,10 +75,9 @@ int	ft_tokens_to_cmds(t_process *proc)
 			curr = curr->next;
 			continue ;
 		}
-		new = ft_new_cmd();
+		new = create_new_command(curr);
 		if (!new)
 			return (0);
-		new->args = malloc(sizeof(char *) * (count_args(curr) + 1));
 		fill_cmd(new, &curr, proc);
 		*node_ptr = new;
 		node_ptr = &new->next;

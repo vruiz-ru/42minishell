@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 08:02:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:45:58 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ static int	skip_quotes(char *line, int *i)
 static int	get_full_len(char *line)
 {
 	int	i;
+	int	fd_len;
 
+	fd_len = is_fd_redirect(line);
+	if (fd_len > 0)
+		return (fd_len);
 	if (ft_strchr("<>|", *line))
 		return (1 + (ft_strchr("<>", *line) && *line == line[1]));
 	i = 0;

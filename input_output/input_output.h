@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 22:05:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:13:55 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 17:59:53 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ char	*ft_prompt(t_process *process);
 int		ft_inputvar(t_process *process, char **line);
 int		ft_parse_line(t_process *process);
 int		ft_tokenize_line(t_process *process, char *line);
+int		is_fd_redirect(char *line);
+int		is_fd_redir_start(char *line, int pos);
+int		is_sep_char_at_pos(char *line, int pos);
 
 // INPUT_OUTPUT/UTILS - INPUTVAR HELPERS
 void	ft_trimmer(char **line, char *name, int raw_val_len);
@@ -64,5 +67,15 @@ int		is_redir(char *str);
 int		ft_tokens_to_cmds(t_process *proc);
 int		ft_exec_redirs(t_cmd *cmd, int *status);
 void	ft_pipe_utils(t_process *process);
+
+// INPUT_OUTPUT/UTILS - COMMAND HELPERS
+void	handle_redir_token(t_cmd *node, t_list **tokens, t_process *proc);
+void	handle_arg_token(t_cmd *node, t_list **tokens, int *i);
+t_cmd	*create_new_command(t_list *curr);
+int		count_args(t_list *tokens);
+void	parse_redir(t_cmd *node, char *redir, char *file, t_process *proc);
+void	handle_fd_redir(t_cmd *node, char *redir);
+void	handle_heredoc_redir(t_cmd *node, char *file, t_process *proc);
+void	handle_fd_redir_check(t_cmd *node, char *redir);
 
 #endif

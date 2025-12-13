@@ -6,7 +6,7 @@
 /*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 18:23:06 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:13:55 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 15:26:29 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ int	ft_contains_variable(char *line)
 	int	i;
 
 	i = 0;
-	if (*line == '$')
-		return (1);
 	while (line[i] && (ft_isalnum(line[i]) || line[i] == '_'))
 		i++;
 	if (line[i] == '=')

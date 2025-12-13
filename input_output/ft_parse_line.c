@@ -6,18 +6,11 @@
 /*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 22:07:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:45:58 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "input_output.h"
-
-static int	is_sep_char(char c)
-{
-	if (c == '|' || c == '<' || c == '>')
-		return (1);
-	return (0);
-}
 
 static int	get_new_len(char *line, int i, int q)
 {
@@ -30,7 +23,7 @@ static int	get_new_len(char *line, int i, int q)
 			q ^= 1;
 		if (line[i] == '"' && q != 1)
 			q ^= 2;
-		if (!q && is_sep_char(line[i]))
+		if (!q && is_sep_char_at_pos(line, i))
 		{
 			len += 2;
 			if (line[i + 1] == line[i] && line[i] != '|')
@@ -55,7 +48,7 @@ static void	fill_line(char *new, char *line, int i, int j)
 			q ^= 1;
 		if (line[i] == '"' && q != 1)
 			q ^= 2;
-		if (!q && is_sep_char(line[i]))
+		if (!q && is_sep_char_at_pos(line, i))
 		{
 			new[j++] = ' ';
 			new[j++] = line[i];

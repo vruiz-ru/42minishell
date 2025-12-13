@@ -6,13 +6,11 @@
 /*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 21:40:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 21:51:00 by aghergut         ###   ########.fr       */
+/*   Updated: 2025/12/13 14:44:40 by aghergut         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
-
-extern int	g_signal_status;
+#include "../headers/minishell.h"
 
 static void	ft_execute_commands(t_process *process)
 {
