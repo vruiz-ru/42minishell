@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aghergut <aghergut@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 21:45:00 by aghergut          #+#    #+#             */
 /*   Updated: 2025/12/12 21:51:00 by aghergut         ###   ########.fr       */

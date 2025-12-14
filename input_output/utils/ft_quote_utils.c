@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quote_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 13:28:42 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Created: 2025/08/04 13:28:42 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:54:17 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	skip_backslashes(char *str, int *idx)
 	return (slash);
 }
 
-int	quote_pos(char *str, char delim, int times)
+int	ft_quote_pos(char *str, char delim, int times)
 {
 	int	idx;
 	int	found;
@@ -77,11 +77,11 @@ int	first_occurrence(t_process *process, char *line, char delim)
 	int		idx;
 	int		len;
 
-	idx = quote_pos(line, delim, 1);
+	idx = ft_quote_pos(line, delim, 1);
 	if (idx <= 0)
 		return (idx);
 	len = idx;
-	if (check_ansi_quote(line, idx, delim))
+	if (ft_check_ansi_quote(line, idx, delim))
 		len = idx - 1;
 	chunk = ft_substr(line, 0, len);
 	if (!chunk)
@@ -93,21 +93,21 @@ int	first_occurrence(t_process *process, char *line, char delim)
 	return (idx);
 }
 
-char	quote_delimiter(char *line)
+char	ft_quote_delimiter(char *line)
 {
 	int	d_start;
 	int	s_start;
 	int	d_end;
 	int	s_end;
 
-	d_start = quote_pos(line, '"', 1);
-	s_start = quote_pos(line, '\'', 1);
+	d_start = ft_quote_pos(line, '"', 1);
+	s_start = ft_quote_pos(line, '\'', 1);
 	d_end = -1;
 	s_end = -1;
 	if (d_start >= 0)
-		d_end = quote_pos(line, '"', 2);
+		d_end = ft_quote_pos(line, '"', 2);
 	if (s_start >= 0)
-		s_end = quote_pos(line, '\'', 2);
+		s_end = ft_quote_pos(line, '\'', 2);
 	if (d_end == -1)
 		d_start = -1;
 	if (s_end == -1)

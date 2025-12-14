@@ -12,7 +12,7 @@
 
 #include "../builtins.h"
 
-int	dash_feature(t_process *process, t_cmd *cmd)
+int	ft_dash_feature(t_process *process, t_cmd *cmd)
 {
 	char	*path;
 
@@ -28,7 +28,7 @@ int	dash_feature(t_process *process, t_cmd *cmd)
 	return (0);
 }
 
-int	up_feature(t_process *process, t_cmd *cmd)
+int	ft_up_feature(t_process *process, t_cmd *cmd)
 {
 	char	*tmp;
 
@@ -38,8 +38,11 @@ int	up_feature(t_process *process, t_cmd *cmd)
 				2), 1);
 	tmp = ft_getcwd();
 	if (tmp)
-		return (free(tmp), update_logical_parent(process), ft_setpaths(process),
-			0);
+	{
+		free(tmp);
+		ft_update_logical_parent(process);
+		return (ft_setpaths(process), 0);
+	}
 	ft_putstr_fd("cd: error retrieving current directory: getcwd: cannot access"\
 			" parent directories: No such file or directory\n", 2);
 	tmp = ft_strjoin(process->prompt->current_wd, "/..");
@@ -51,7 +54,7 @@ int	up_feature(t_process *process, t_cmd *cmd)
 	return (ft_setpaths(process), 0);
 }
 
-int	home_feature(t_process *process, t_cmd *cmd)
+int	ft_home_feature(t_process *process, t_cmd *cmd)
 {
 	char	*path;
 	char	*arg;
@@ -76,7 +79,7 @@ int	home_feature(t_process *process, t_cmd *cmd)
 	return (0);
 }
 
-int	back_feature(t_process *process, t_cmd *cmd)
+int	ft_back_feature(t_process *process, t_cmd *cmd)
 {
 	char	*last_wd;
 
@@ -95,7 +98,7 @@ int	back_feature(t_process *process, t_cmd *cmd)
 	return (ft_pwd(process, cmd));
 }
 
-int	root_feature(t_process *process, t_cmd *cmd)
+int	ft_root_feature(t_process *process, t_cmd *cmd)
 {
 	if (cmd->args[2])
 		return (ft_putstr_fd("cd: too many arguments\n", 2), 1);

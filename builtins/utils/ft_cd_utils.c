@@ -30,7 +30,7 @@ static void	update_env_str(t_process *proc, char *key, char *value)
 	free(full_str);
 }
 
-void	update_logical_parent(t_process *process)
+void	ft_update_logical_parent(t_process *process)
 {
 	char	*current;
 	char	*last_slash;
@@ -77,7 +77,7 @@ void	ft_setpaths(t_process *process)
 	update_env_str(process, "PWD=", process->prompt->current_wd);
 }
 
-int	invalid_options(char *token)
+int	ft_invalid_options(char *token)
 {
 	int	idx;
 	int	count;
@@ -95,7 +95,7 @@ int	invalid_options(char *token)
 	return (0);
 }
 
-int	path_input(t_process *process, t_cmd *cmd)
+int	ft_path_input(t_process *process, t_cmd *cmd)
 {
 	char	*path;
 

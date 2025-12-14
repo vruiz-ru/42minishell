@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readinput.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/31 18:35:16 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Created: 2025/07/31 18:35:16 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:52:58 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
 #include "input_output.h"
 
 void	ft_readinput(t_process *process)

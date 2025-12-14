@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_fork_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 10:36:15 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Created: 2025/11/09 10:36:15 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:52:13 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../builtins/builtins.h"
-#include "../headers/minishell.h"
-#include <errno.h>
-#include <sys/stat.h>
+#include "input_output.h"
 
 static void	ft_execute_external(t_process *process, t_cmd *cmd)
 {
@@ -22,7 +19,7 @@ static void	ft_execute_external(t_process *process, t_cmd *cmd)
 
 	path = ft_get_cmd_path(cmd->args[0], process->envs->parent_env);
 	if (!path)
-		cmd_not_found(cmd->args[0]);
+		ft_cmd_not_found(cmd->args[0]);
 	execve(path, cmd->args, process->envs->parent_env);
 	err = errno;
 	ft_exec_error(path, cmd->args[0], err);
@@ -37,7 +34,7 @@ static void	child_process(t_process *proc, t_cmd *cmd, int *pipefd, int prev)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		config_pipes(cmd, pipefd, prev);
+		ft_config_pipes(cmd, pipefd, prev);
 		if (ft_apply_redirs(cmd) != 0)
 			exit(1);
 		ret = ft_builtins(proc, cmd);
@@ -75,7 +72,7 @@ static void	wait_children(t_process *process, int last_pid)
 
 static void	update_parent_fds(t_cmd *cmd, int *pipefd, int *prev_fd)
 {
-	close_fds(cmd, *prev_fd);
+	ft_close_fds(cmd, *prev_fd);
 	if (cmd->next)
 	{
 		close(pipefd[1]);

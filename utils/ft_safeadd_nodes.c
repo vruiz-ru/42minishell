@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_safeadd_nodes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/03 20:40:35 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 21:11:51 by aghergut         ###   ########.fr       */
+/*   Created: 2025/11/03 20:40:35 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:55:17 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ void	ft_safeadd_tokens(t_list **tokens, char **token)
 	char	*to_list;
 
 	ptr = *token;
-	if (!ptr || !*ptr)
+	if (!ptr || (!*ptr && ptr[0] != 1))
 	{
-		if (ptr)
-			free(ptr);
+		free(ptr);
 		*token = NULL;
 		return ;
 	}

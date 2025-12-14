@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec_redirs.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 16:43:36 by aghergut         ###   ########.fr       */
+/*   Created: 2025/07/31 12:49:41 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:52:05 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
-#include <fcntl.h>
+#include "input_output.h"
 
 static int	set_infile(char *path, int heredoc_fd, t_io_type type)
 {

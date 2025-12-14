@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "input_output.h"
 
 void	ft_free_array(char **arr)
 {
@@ -56,6 +56,8 @@ char	*ft_get_cmd_path(char *cmd, char **envp)
 	char	*final_path;
 	int		i;
 
+	if (!cmd || !*cmd)
+		return (NULL);
 	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	i = 0;
@@ -71,7 +73,7 @@ char	*ft_get_cmd_path(char *cmd, char **envp)
 	return (final_path);
 }
 
-void	cmd_not_found(char *cmd)
+void	ft_cmd_not_found(char *cmd)
 {
 	char	*msg;
 	char	*tmp;

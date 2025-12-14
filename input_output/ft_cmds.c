@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmds.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/02 17:54:08 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 17:59:53 by aghergut         ###   ########.fr       */
+/*   Created: 2025/11/02 17:54:08 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:51:50 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "input_output.h"
 
-void	handle_fd_redir(t_cmd *node, char *redir)
+void	ft_handle_fd_redir(t_cmd *node, char *redir)
 {
 	int		src_fd;
 	int		target_fd;
@@ -28,10 +28,10 @@ void	handle_fd_redir(t_cmd *node, char *redir)
 		ft_add_io(node, IO_OUT, "2>&1", -1);
 }
 
-void	parse_redir(t_cmd *node, char *redir, char *file, t_process *proc)
+void	ft_parse_redir(t_cmd *node, char *redir, char *file, t_process *proc)
 {
 	if (!ft_strncmp(redir, "<<", 3))
-		handle_heredoc_redir(node, file, proc);
+		ft_handle_heredoc_redir(node, file, proc);
 	else if (!ft_strncmp(redir, ">>", 3))
 		ft_add_io(node, IO_APPEND, file, -1);
 	else if (!ft_strncmp(redir, "<", 2))
@@ -39,7 +39,19 @@ void	parse_redir(t_cmd *node, char *redir, char *file, t_process *proc)
 	else if (!ft_strncmp(redir, ">", 2))
 		ft_add_io(node, IO_OUT, file, -1);
 	else
-		handle_fd_redir_check(node, redir);
+		ft_handle_fd_redir_check(node, redir);
+}
+
+static int	is_pipe_separator(char *str)
+{
+	int	len;
+
+	if (!str || str[0] != '|' || str[1] != '\0')
+		return (0);
+	len = ft_strlen(str);
+	if (len > 0 && str[len - 1] == 1)
+		return (0);
+	return (1);
 }
 
 static void	fill_cmd(t_cmd *node, t_list **tokens, t_process *proc)
@@ -48,13 +60,13 @@ static void	fill_cmd(t_cmd *node, t_list **tokens, t_process *proc)
 	char	*str;
 
 	i = 0;
-	while (*tokens && ((char *)(*tokens)->content)[0] != '|')
+	while (*tokens && !is_pipe_separator((char *)(*tokens)->content))
 	{
 		str = (char *)(*tokens)->content;
-		if (is_redir(str))
-			handle_redir_token(node, tokens, proc);
+		if (ft_is_redir(str))
+			ft_handle_redir_token(node, tokens, proc);
 		else
-			handle_arg_token(node, tokens, &i);
+			ft_handle_arg_token(node, tokens, &i);
 	}
 	node->args[i] = NULL;
 }
@@ -70,12 +82,12 @@ int	ft_tokens_to_cmds(t_process *proc)
 	node_ptr = &proc->commands;
 	while (curr)
 	{
-		if (((char *)curr->content)[0] == '|')
+		if (is_pipe_separator((char *)curr->content))
 		{
 			curr = curr->next;
 			continue ;
 		}
-		new = create_new_command(curr);
+		new = ft_create_new_command(curr);
 		if (!new)
 			return (0);
 		fill_cmd(new, &curr, proc);

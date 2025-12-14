@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_helpers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/13 18:00:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 17:59:53 by aghergut         ###   ########.fr       */
+/*   Created: 2025/12/13 18:00:00 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:54:03 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
 #include "../input_output.h"
 
-void	handle_heredoc_redir(t_cmd *node, char *file, t_process *proc)
+void	ft_handle_heredoc_redir(t_cmd *node, char *file, t_process *proc)
 {
 	int	heredoc_fd;
 	int	expand;
@@ -30,7 +29,7 @@ void	handle_heredoc_redir(t_cmd *node, char *file, t_process *proc)
 	ft_add_io(node, IO_HEREDOC, "heredoc", heredoc_fd);
 }
 
-void	handle_fd_redir_check(t_cmd *node, char *redir)
+void	ft_handle_fd_redir_check(t_cmd *node, char *redir)
 {
 	int	i;
 
@@ -38,5 +37,5 @@ void	handle_fd_redir_check(t_cmd *node, char *redir)
 	while (redir[i] && ft_isdigit(redir[i]))
 		i++;
 	if (i > 0 && ft_strchr(redir + i, '&'))
-		handle_fd_redir(node, redir);
+		ft_handle_fd_redir(node, redir);
 }

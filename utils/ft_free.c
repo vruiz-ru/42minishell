@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/24 12:20:33 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 14:36:59 by aghergut         ###   ########.fr       */
+/*   Created: 2025/07/24 12:20:33 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:54:55 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	del_redir(void *content)
+void	ft_del_redir(void *content)
 {
 	t_io	*io;
 
@@ -26,7 +26,7 @@ void	del_redir(void *content)
 	free(io);
 }
 
-void	free_env_items(char ***map)
+void	ft_free_env_items(char ***map)
 {
 	char	**ptr;
 	int		i;
@@ -61,7 +61,7 @@ void	ft_free_cmds(t_cmd *cmds)
 		if (cmds->path)
 			free(cmds->path);
 		if (cmds->redirs)
-			ft_lstclear(&cmds->redirs, del_redir);
+			ft_lstclear(&cmds->redirs, ft_del_redir);
 		free(cmds);
 		cmds = tmp;
 	}
@@ -72,9 +72,9 @@ static void	ft_free_envs(t_envs *envs)
 	if (!envs)
 		return ;
 	if (envs->parent_env)
-		free_env_items(&envs->parent_env);
+		ft_free_env_items(&envs->parent_env);
 	if (envs->static_env)
-		free_env_items(&envs->static_env);
+		ft_free_env_items(&envs->static_env);
 	free(envs);
 }
 

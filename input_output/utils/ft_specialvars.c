@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_specialvars.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 17:04:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Created: 2025/11/09 17:04:00 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:54:30 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_specialvars(t_process *proc, char **var_name, char ch)
 	return (0);
 }
 
-int	check_heredoc_trigger(t_list *tokens)
+int	ft_check_heredoc_trigger(t_list *tokens)
 {
 	t_list	*curr;
 	char	*last_valid;

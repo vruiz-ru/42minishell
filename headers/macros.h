@@ -18,7 +18,7 @@
 # define HOME "~"
 # define REPLY "💬"
 # define WRONG "❓"
-# define NAME "minishell42"
+# define NAME "minishell"
 # define CLEAR "\e[1;1H\e[2J" // \033[H\033[J
 
 #endif

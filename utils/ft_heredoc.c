@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 13:41:27 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 15:36:38 by aghergut         ###   ########.fr       */
+/*   Created: 2025/08/04 13:41:27 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:55:00 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,17 @@ static void	write_to_tmp(int fd, char *line)
 	free(line);
 }
 
-static int	process_heredoc_loop(int fd, char *delimiter, int expand,
-		t_process *proc)
+static void	warning_err(char *delimiter)
+{
+	char	*s;
+
+	s = "minishell: warning: here-document delimited by end-of-file (wanted '";
+	ft_putstr_fd(s, STDERR_FILENO);
+	ft_putstr_fd(delimiter, STDERR_FILENO);
+	ft_putstr_fd("')\n", STDERR_FILENO);
+}
+
+static int	proc_loop(t_process *proc, int fd, char *delimiter, int expand)
 {
 	char	*line;
 
@@ -39,10 +48,7 @@ static int	process_heredoc_loop(int fd, char *delimiter, int expand,
 		{
 			if (g_signal_status == 130)
 				return (1);
-			ft_putstr_fd("minishell: warning: here-document delimited by\
-				 end-of-file (wanted `", STDERR_FILENO);
-			ft_putstr_fd(delimiter, STDERR_FILENO);
-			ft_putstr_fd("')\n", STDERR_FILENO);
+			warning_err(delimiter);
 			break ;
 		}
 		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1))
@@ -70,7 +76,7 @@ int	ft_heredoc(char *delimiter, int expand, t_process *proc)
 	if (fd < 0)
 		return (close(stdin_backup), perror("heredoc open"), -1);
 	signal(SIGINT, heredoc_sigint);
-	status = process_heredoc_loop(fd, delimiter, expand, proc);
+	status = proc_loop(proc, fd, delimiter, expand);
 	dup2(stdin_backup, STDIN_FILENO);
 	close(stdin_backup);
 	close(fd);

@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quote.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/10 08:02:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 16:45:58 by aghergut         ###   ########.fr       */
+/*   Created: 2025/10/10 08:02:00 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:52:53 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
 #include "input_output.h"
 
 static int	handle_error(t_process *proc, int type)
@@ -46,7 +45,7 @@ static int	get_full_len(char *line)
 	int	i;
 	int	fd_len;
 
-	fd_len = is_fd_redirect(line);
+	fd_len = ft_is_fd_redirect(line);
 	if (fd_len > 0)
 		return (fd_len);
 	if (ft_strchr("<>|", *line))

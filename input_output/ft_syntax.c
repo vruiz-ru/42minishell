@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_syntax.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/10 08:02:20 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 15:34:26 by aghergut         ###   ########.fr       */
+/*   Created: 2025/10/10 08:02:20 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:53:14 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "input_output.h"
-#include "../../headers/minishell.h"
 
 static int	print_error(t_process *proc, char *token)
 {
@@ -28,6 +27,8 @@ static int	is_redirect(char *s)
 {
 	if (!s)
 		return (0);
+	if (is_quoted_token(s))
+		return (0);
 	if (!ft_strncmp(s, "<<", 3) || !ft_strncmp(s, ">>", 3)
 		|| (s[0] == '<' && !s[1]) || (s[0] == '>' && !s[1]))
 		return (1);
@@ -37,6 +38,8 @@ static int	is_redirect(char *s)
 static int	is_op(char *s)
 {
 	if (!s)
+		return (0);
+	if (is_quoted_token(s))
 		return (0);
 	if ((s[0] == '|' && !s[1]) || is_redirect(s))
 		return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_inputvar_parse.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/12 22:00:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:13:55 by aghergut         ###   ########.fr       */
+/*   Created: 2025/12/12 22:00:00 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:53:44 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ int	ft_get_data(char *line, char **name, char **val, int *raw_len)
 	return (1);
 }
 
-int	is_var_start(char c)
+int	ft_is_var_start(char c)
 {
 	if (ft_isalnum(c) || c == '_' || c == '?' || c == '$')
 		return (1);
 	return (0);
 }
 
-int	check_ansi_quote(char *line, int idx, char delim)
+int	ft_check_ansi_quote(char *line, int idx, char delim)
 {
 	int	back;
 	int	slashes;

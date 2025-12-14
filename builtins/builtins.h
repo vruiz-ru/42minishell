@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/02 18:47:46 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 21:51:00 by aghergut         ###   ########.fr       */
+/*   Created: 2025/11/02 18:47:46 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:51:10 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@
 
 // BUITLINS/UTILS
 //      CD
-int		dash_feature(t_process *process, t_cmd *cmd);
-int		up_feature(t_process *process, t_cmd *cmd);
-int		home_feature(t_process *process, t_cmd *cmd);
-int		back_feature(t_process *process, t_cmd *cmd);
-int		root_feature(t_process *process, t_cmd *cmd);
+int		ft_dash_feature(t_process *process, t_cmd *cmd);
+int		ft_up_feature(t_process *process, t_cmd *cmd);
+int		ft_home_feature(t_process *process, t_cmd *cmd);
+int		ft_back_feature(t_process *process, t_cmd *cmd);
+int		ft_root_feature(t_process *process, t_cmd *cmd);
 void	ft_setpaths(t_process *process);
-void	update_logical_parent(t_process *process);
-int		invalid_options(char *token);
-int		path_input(t_process *process, t_cmd *cmd);
+void	ft_update_logical_parent(t_process *process);
+int		ft_invalid_options(char *token);
+int		ft_path_input(t_process *process, t_cmd *cmd);
 char	*ft_getcwd(void);
 char	*ft_getvar(char **envp, char *var_name);
 int		ft_is_parent_builtin(t_cmd *cmd);

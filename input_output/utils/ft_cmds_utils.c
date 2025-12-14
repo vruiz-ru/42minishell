@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmds_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/31 12:49:41 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 16:43:36 by aghergut         ###   ########.fr       */
+/*   Created: 2025/07/31 12:49:41 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:53:29 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../input_output.h"
-#include <fcntl.h>
 
 t_cmd	*ft_new_cmd(void)
 {
@@ -27,7 +26,7 @@ t_cmd	*ft_new_cmd(void)
 	return (cmd);
 }
 
-int	is_redir(char *str)
+int	ft_is_redir(char *str)
 {
 	int	i;
 

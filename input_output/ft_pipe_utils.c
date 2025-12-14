@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "input_output.h"
 
-void	config_pipes(t_cmd *cmd, int *pipefd, int prev_fd)
+void	ft_config_pipes(t_cmd *cmd, int *pipefd, int prev_fd)
 {
 	if (prev_fd != 0)
 	{
@@ -27,7 +27,7 @@ void	config_pipes(t_cmd *cmd, int *pipefd, int prev_fd)
 	}
 }
 
-void	close_fds(t_cmd *cmd, int prev_fd)
+void	ft_close_fds(t_cmd *cmd, int prev_fd)
 {
 	(void)cmd;
 	if (prev_fd != 0)

@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/13 17:00:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 16:45:58 by aghergut         ###   ########.fr       */
+/*   Created: 2025/12/13 17:00:00 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:54:23 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
 #include "../input_output.h"
 
-int	is_fd_redir_start(char *line, int pos)
+int	ft_is_fd_redir_start(char *line, int pos)
 {
 	int	i;
 
@@ -25,19 +24,19 @@ int	is_fd_redir_start(char *line, int pos)
 	return (i < pos - 1);
 }
 
-int	is_sep_char_at_pos(char *line, int pos)
+int	ft_is_sep_char_at_pos(char *line, int pos)
 {
 	char	c;
 
 	c = line[pos];
 	if (c == '|')
 		return (1);
-	if ((c == '<' || c == '>') && !is_fd_redir_start(line, pos))
+	if ((c == '<' || c == '>') && !ft_is_fd_redir_start(line, pos))
 		return (1);
 	return (0);
 }
 
-int	is_fd_redirect(char *line)
+int	ft_is_fd_redirect(char *line)
 {
 	int	i;
 

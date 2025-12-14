@@ -41,15 +41,15 @@ int	ft_cd(t_process *process, t_cmd *cmd)
 	if (!cmd->args[1])
 		return (ft_home(process));
 	arg = cmd->args[1];
-	if (invalid_options(arg))
+	if (ft_invalid_options(arg))
 		return (ft_putstr_fd("cd: invalid options\n", 2), 1);
 	if (!ft_strncmp(arg, "..", 3))
-		return (up_feature(process, cmd));
+		return (ft_up_feature(process, cmd));
 	if (arg[0] == '~')
-		return (home_feature(process, cmd));
+		return (ft_home_feature(process, cmd));
 	if (!ft_strncmp(arg, "-", 2) && !arg[1])
-		return (back_feature(process, cmd));
+		return (ft_back_feature(process, cmd));
 	if (!ft_strncmp(arg, "--", 3))
-		return (dash_feature(process, cmd));
-	return (path_input(process, cmd));
+		return (ft_dash_feature(process, cmd));
+	return (ft_path_input(process, cmd));
 }

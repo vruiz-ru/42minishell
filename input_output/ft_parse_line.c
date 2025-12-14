@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/06 22:07:38 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/13 16:45:58 by aghergut         ###   ########.fr       */
+/*   Created: 2025/08/06 22:07:38 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:52:32 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	get_new_len(char *line, int i, int q)
 			q ^= 1;
 		if (line[i] == '"' && q != 1)
 			q ^= 2;
-		if (!q && is_sep_char_at_pos(line, i))
+		if (!q && ft_is_sep_char_at_pos(line, i))
 		{
 			len += 2;
 			if (line[i + 1] == line[i] && line[i] != '|')
@@ -48,7 +48,7 @@ static void	fill_line(char *new, char *line, int i, int j)
 			q ^= 1;
 		if (line[i] == '"' && q != 1)
 			q ^= 2;
-		if (!q && is_sep_char_at_pos(line, i))
+		if (!q && ft_is_sep_char_at_pos(line, i))
 		{
 			new[j++] = ' ';
 			new[j++] = line[i];

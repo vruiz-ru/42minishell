@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/08 11:19:55 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Created: 2025/10/08 11:19:55 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:54:12 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	assign_value(char **env, char **dest, int idx)
 	return (1);
 }
 
-int	already_exists(char **env, char *var_name)
+int	ft_already_exists(char **env, char *var_name)
 {
 	int	idx;
 	int	len_invar;
@@ -54,7 +54,7 @@ int	already_exists(char **env, char *var_name)
 	return (-1);
 }
 
-char	*clean_line(char *content, char token)
+char	*ft_clean_line(char *content, char token)
 {
 	char	*seq;
 	char	*new;
@@ -80,35 +80,35 @@ char	*clean_line(char *content, char token)
 	return (free(content), new);
 }
 
-void	scan_char(t_process *process, char *content, char **var_name, int *idx)
+void	ft_scan_char(t_process *proc, char *str, char **var_name, int *idx)
 {
 	char	*stop;
 
 	stop = " \t\n/.,:-+=?!@#^&*()[]{}'\"\\|<>;~";
-	if (content[*idx] == '\\' && content[*idx + 1] == '$')
+	if (str[*idx] == '\\' && str[*idx + 1] == '$')
 	{
 		(*idx)++;
 		return ;
 	}
-	else if (content[*idx] == '$' && !process->in_heredoc
-		&& is_var_start(content[*idx + 1]))
+	else if (str[*idx] == '$' && !proc->in_heredoc
+		&& ft_is_var_start(str[*idx + 1]))
 	{
 		(*idx)++;
-		if (ft_specialvars(process, var_name, content[*idx]))
+		if (ft_specialvars(proc, var_name, str[*idx]))
 		{
 			(*idx)++;
 			return ;
 		}
-		while (content[*idx] && !ft_strchr(stop, content[*idx]))
+		while (str[*idx] && !ft_strchr(stop, str[*idx]))
 		{
-			*var_name = ft_addchar(*var_name, content[*idx]);
+			*var_name = ft_addchar(*var_name, str[*idx]);
 			(*idx)++;
 		}
 	}
 	return ;
 }
 
-void	insert_value(t_process *process, char **dest, char *var_name)
+void	ft_insert_value(t_process *process, char **dest, char *var_name)
 {
 	char	**process_env;
 	char	**static_env;
@@ -116,10 +116,10 @@ void	insert_value(t_process *process, char **dest, char *var_name)
 
 	process_env = process->envs->parent_env;
 	static_env = process->envs->static_env;
-	founded = already_exists(static_env, var_name);
+	founded = ft_already_exists(static_env, var_name);
 	if (founded >= 0 && assign_value(static_env, dest, founded))
 		return ;
-	founded = already_exists(process_env, var_name);
+	founded = ft_already_exists(process_env, var_name);
 	if (founded >= 0 && assign_value(process_env, dest, founded))
 		return ;
 }

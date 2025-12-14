@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_inputvar_helpers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/12 22:00:00 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:13:55 by aghergut         ###   ########.fr       */
+/*   Created: 2025/12/12 22:00:00 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:53:37 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

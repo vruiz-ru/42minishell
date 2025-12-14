@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_token.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergut <aghergut@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vruiz-ru <vruiz-ru@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/02 17:51:17 by aghergut          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:44 by aghergut         ###   ########.fr       */
+/*   Created: 2025/11/02 17:51:17 by vruiz-ru          #+#    #+#             */
+/*   Updated: 2025/12/14 12:52:38 by vruiz-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,48 +39,42 @@ static int	append_var(t_process *p, char **res, char *str, int i)
 	return (free(var_name), i);
 }
 
-static int	check_quotes(char c, char *quote)
+static void	parse_loop(t_process *p, char **res, char *str, char *quote)
 {
-	if (!*quote && (c == '\'' || c == '"'))
+	int	i;
+
+	i = 0;
+	while (str[i])
 	{
-		*quote = c;
-		return (1);
+		if (check_quotes(str[i], quote))
+			i++;
+		else if (str[i] == '$' && *quote != '\'')
+		{
+			if (!*quote && (str[i + 1] == '\'' || str[i + 1] == '"'))
+				i++;
+			else
+				i = append_var(p, res, str, i);
+		}
+		else
+			*res = ft_addchar(*res, str[i++]);
 	}
-	if (*quote && c == *quote)
-	{
-		*quote = 0;
-		return (1);
-	}
-	return (0);
 }
 
 char	*ft_parse_token(t_process *process, char *str, char token)
 {
 	char	*res;
-	int		i;
 	char	quote;
+	int		was_quoted;
 
 	(void)token;
 	if (!str)
 		return (NULL);
+	was_quoted = was_fully_quoted(str);
 	res = ft_strdup("");
-	i = 0;
 	quote = 0;
-	while (str[i])
-	{
-		if (check_quotes(str[i], &quote))
-			i++;
-		else if (str[i] == '$' && quote != '\'')
-		{
-			if (!quote && (str[i + 1] == '\'' || str[i + 1] == '"'))
-				i++;
-			else
-				i = append_var(process, &res, str, i);
-		}
-		else
-			res = ft_addchar(res, str[i++]);
-	}
-	return (free(str), res);
+	parse_loop(process, &res, str, &quote);
+	free(str);
+	return (mark_if_quoted_op(res, was_quoted));
 }
 
 char	*ft_parse_delimiter(char *str, int *quoted)
